@@ -1,4 +1,6 @@
-/* Rideau d'ouverture : deux panneaux qui s'écartent sur le monogramme. */
+/* Rideau d'ouverture : deux panneaux qui s'écartent sur le monogramme.
+   Les états sont désormais pilotés par la frise GSAP de <Curtain> ; le CSS ne
+   décrit plus que la position de départ. */
 
 .curtain {
   position: fixed;
@@ -12,7 +14,6 @@
   flex: 1;
   background: var(--noir);
   position: relative;
-  transition: transform 1.4s var(--ease);
 }
 
 .panel::after {
@@ -25,16 +26,8 @@
   opacity: 0.6;
 }
 
-.left {
-  transform: translateX(0);
-}
-
 .left::after {
   right: 0;
-}
-
-.right {
-  transform: translateX(0);
 }
 
 .right::after {
@@ -51,20 +44,5 @@
   font-size: 1.6rem;
   color: var(--or);
   letter-spacing: 0.08em;
-  opacity: 1;
-  transition: opacity 0.5s ease;
   z-index: 2;
-}
-
-/* État ouvert */
-.opened .left {
-  transform: translateX(-101%);
-}
-
-.opened .right {
-  transform: translateX(101%);
-}
-
-.opened .mark {
-  opacity: 0;
 }

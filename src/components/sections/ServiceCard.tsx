@@ -9,11 +9,18 @@ type ServiceCardProps = {
   position: number;
 };
 
-/** Carte de service : visuel plein cadre, titre, description révélée au survol. */
+/**
+ * Carte de service : visuel plein cadre, titre, description révélée au survol.
+ *
+ * Le calque `.frame` sert de prise à l'apparition au défilement (voir
+ * Services.tsx) et laisse à l'image sa propre transformation de survol.
+ */
 export default function ServiceCard({ service, position }: ServiceCardProps) {
   return (
     <article className={styles.card}>
-      <SmartImage src={service.image} alt={service.title} fallbackSeed={service.fallbackSeed} />
+      <div className={styles.frame}>
+        <SmartImage src={service.image} alt={service.title} fallbackSeed={service.fallbackSeed} />
+      </div>
       <div className={styles.body}>
         <div className={styles.num}>{String(position).padStart(2, '0')}</div>
         <h3>{service.title}</h3>

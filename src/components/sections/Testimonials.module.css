@@ -5,9 +5,9 @@
   overflow: hidden;
 }
 
+/* Le déplacement du rail est piloté par GSAP (voir Testimonials.tsx). */
 .track {
   display: flex;
-  transition: transform 0.7s var(--ease);
 }
 
 .slide {

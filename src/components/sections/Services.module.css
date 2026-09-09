@@ -14,6 +14,13 @@
   overflow: hidden;
 }
 
+/* Calque animé à l'entrée dans le champ (voir Services.tsx). Il laisse à
+   l'image sa propre transformation, réservée au survol. */
+.frame {
+  position: absolute;
+  inset: 0;
+}
+
 .card img {
   position: absolute;
   inset: 0;
