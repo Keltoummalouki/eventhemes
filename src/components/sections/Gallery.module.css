@@ -1,0 +1,98 @@
+/* Portfolio : filtres par catégorie et mosaïque en colonnes. */
+
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+}
+
+.filter {
+  padding: 10px 20px;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--ligne);
+  color: var(--blanc-doux);
+  transition: all 0.35s ease;
+}
+
+.filter.active,
+.filter:hover {
+  border-color: var(--or);
+  color: var(--blanc);
+  background: rgba(201, 166, 104, 0.08);
+}
+
+.masonry {
+  columns: 2;
+  column-gap: 14px;
+}
+
+.item {
+  break-inside: avoid;
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.hidden {
+  display: none;
+}
+
+.item img {
+  filter: brightness(0.82);
+  transition:
+    transform 0.8s var(--ease),
+    filter 0.5s ease;
+}
+
+.item:hover img {
+  transform: scale(1.06);
+  filter: brightness(0.55);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  background: linear-gradient(180deg, transparent 40%, rgba(10, 9, 8, 0.85) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.item:hover .overlay {
+  opacity: 1;
+}
+
+.cat {
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--or-clair);
+}
+
+/* `font-weight` fixé explicitement : le gras par défaut de <h4> retombait, dans
+   la maquette, sur l'italique 500 de Cormorant (seule graisse italique chargée).
+   On reproduit ce rendu exact plutôt que la graisse 600 désormais disponible. */
+.overlay h4 {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: var(--blanc);
+  margin-top: 6px;
+}
+
+@media (min-width: 760px) {
+  .masonry {
+    columns: 3;
+  }
+}

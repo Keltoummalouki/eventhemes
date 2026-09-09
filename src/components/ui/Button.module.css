@@ -1,0 +1,64 @@
+/* Bouton signature AURÉLYS : filet doré, capitales espacées, remplissage animé. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.74rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 15px 30px;
+  border: 1px solid var(--or);
+  color: var(--blanc);
+  position: relative;
+  overflow: hidden;
+  transition:
+    color 0.4s ease,
+    border-color 0.4s ease;
+}
+
+/* Le libellé passe au-dessus du remplissage animé. */
+.btn > span {
+  position: relative;
+  z-index: 2;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--or);
+  transform: translateX(-101%);
+  transition: transform 0.45s var(--ease);
+  z-index: 1;
+}
+
+.btn:hover {
+  color: var(--noir);
+}
+
+.btn:hover::before {
+  transform: translateX(0);
+}
+
+.ghost {
+  border-color: rgba(244, 239, 227, 0.35);
+}
+
+.ghost:hover {
+  border-color: var(--or);
+}
+
+.fill {
+  background: var(--or);
+  color: var(--noir);
+  border-color: var(--or);
+}
+
+.fill::before {
+  background: var(--blanc);
+}
+
+.fill:hover {
+  color: var(--noir);
+}

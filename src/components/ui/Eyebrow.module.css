@@ -1,0 +1,24 @@
+/* Sur-titre : capitales très espacées, précédées d'un filet doré. */
+
+.eyebrow {
+  font-family: var(--ff-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--or);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--or);
+  display: inline-block;
+}
+
+.centered {
+  justify-content: center;
+}

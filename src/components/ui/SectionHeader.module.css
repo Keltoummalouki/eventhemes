@@ -1,0 +1,28 @@
+/* En-tête de section : sur-titre, titre en italique, chapô. */
+
+.head {
+  max-width: 640px;
+  margin-bottom: 64px;
+}
+
+.head h2 {
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  font-style: italic;
+  color: var(--blanc);
+  margin-top: 18px;
+  line-height: 1.15;
+}
+
+.head p {
+  margin-top: 20px;
+  color: var(--blanc-doux);
+  font-size: 1rem;
+  line-height: 1.8;
+  max-width: 52ch;
+}
+
+.centered {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}

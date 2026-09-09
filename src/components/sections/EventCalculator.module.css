@@ -1,0 +1,187 @@
+/* Simulateur de budget : formulaire à gauche, estimation à droite. */
+
+.calc {
+  background: var(--noir-2);
+}
+
+.panel {
+  border: 1px solid var(--ligne);
+  padding: 50px 6vw;
+  background: linear-gradient(160deg, rgba(201, 166, 104, 0.05), transparent 60%);
+  display: grid;
+  gap: 40px;
+}
+
+.group {
+  margin-bottom: 28px;
+}
+
+.group:last-child {
+  margin-bottom: 0;
+}
+
+.groupLabel {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--or);
+  margin-bottom: 14px;
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chip {
+  padding: 10px 18px;
+  border: 1px solid var(--ligne);
+  font-size: 0.82rem;
+  color: var(--blanc-doux);
+  transition: all 0.3s ease;
+}
+
+.chip.active,
+.chip:hover {
+  border-color: var(--or);
+  color: var(--blanc);
+  background: rgba(201, 166, 104, 0.1);
+}
+
+.rangeWrap {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 1px;
+  background: var(--ligne);
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--or);
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(201, 166, 104, 0.18);
+}
+
+/* Équivalent Firefox du curseur doré (absent de la maquette, qui n'y affichait
+   que le curseur par défaut du navigateur). */
+.range::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: var(--or);
+  cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(201, 166, 104, 0.18);
+}
+
+.selectLine {
+  position: relative;
+}
+
+.select {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--ligne);
+  color: var(--blanc);
+  padding: 14px 16px;
+  font-family: var(--ff-body);
+  font-size: 0.9rem;
+  appearance: none;
+}
+
+.select:focus {
+  outline: 1px solid var(--or);
+}
+
+/* Les options héritent du fond du système : on les force sur la charte sombre. */
+.select option {
+  background: var(--noir-2);
+  color: var(--blanc);
+}
+
+.result {
+  border-left: 1px solid var(--ligne);
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+}
+
+/* Sélecteurs descendants volontaires : ils doivent l'emporter sur les modules
+   Eyebrow et Button, quel que soit l'ordre de chargement des feuilles. */
+.result .resultEyebrow {
+  margin-bottom: 20px;
+}
+
+.price {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  color: var(--or-clair);
+  line-height: 1.1;
+  transition: opacity 0.3s ease;
+}
+
+/* Le montant s'efface brièvement à chaque recalcul (60 ms, sans fondu), comme
+   dans la maquette. `step-end` maintient l'opacité à 0 pendant toute la durée
+   puis rétablit la valeur de base ; la règle globale « mouvement réduit »
+   neutralise l'effet. */
+.priceValue {
+  animation: priceFlash 60ms step-end;
+}
+
+@keyframes priceFlash {
+  from {
+    opacity: 0;
+  }
+}
+
+.price small {
+  display: block;
+  font-family: var(--ff-body);
+  font-style: normal;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blanc-doux);
+  margin-bottom: 10px;
+}
+
+.note {
+  margin-top: 18px;
+  font-size: 0.82rem;
+  color: var(--blanc-doux);
+  line-height: 1.7;
+  max-width: 38ch;
+}
+
+.result .resultBtn {
+  margin-top: 30px;
+  align-self: flex-start;
+}
+
+@media (min-width: 900px) {
+  .panel {
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 70px;
+  }
+
+  .result {
+    padding-left: 50px;
+    border-left: 1px solid var(--ligne);
+  }
+}

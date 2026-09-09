@@ -375,19 +375,60 @@ These are future possibilities and are not automatically part of the initial imp
 
 ---
 
+## Tech Stack
+
+- **Next.js (App Router)** with TypeScript — statically prerendered, ready for the future project pages, CMS content and i18n listed above.
+- **CSS Modules** over hand-written CSS, with the approved palette exposed as design tokens. No UI framework and no utility-class library: the mockup's values are the design system.
+- **`next/font`** self-hosts Cormorant Garamond and Jost, so typography matches the reference without a render-blocking request to a third-party CDN.
+
+No runtime dependencies beyond React and Next.
+
+---
+
+## Getting Started
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+```
+
+| Script | Purpose |
+| --- | --- |
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript, no emit |
+
+---
+
 ## Project Files
 
 ```text
 AURELYS/
-├── CLAUDE.md
+├── CLAUDE.md                  Project context and implementation guidance
 ├── README.md
-├── aurelys-maquette.html
-└── ...
+├── aurelys-maquette .html     Approved visual reference (design source of truth)
+└── src/
+    ├── app/                   Layout, page composition, fonts, metadata, favicon
+    ├── components/
+    │   ├── layout/            Curtain, Header, MobileMenu, Footer
+    │   ├── sections/          Hero, Stats, Services, Equipment, ProcessTimeline,
+    │   │                      Gallery, Testimonials, EventCalculator, CTA
+    │   └── ui/                Button, Eyebrow, SectionHeader, Divider, Reveal,
+    │                          SmartImage, icons
+    ├── data/                  All repeated content (services, equipment, gallery,
+    │                          testimonials, navigation, calculator options)
+    ├── hooks/                 useReveal, useCarousel, useScrolled,
+    │                          usePrefersReducedMotion
+    ├── lib/                   Pricing logic, image URL builders, class helper
+    └── styles/                Design tokens, global base, shared utilities
 ```
 
-`CLAUDE.md` contains project context and implementation guidance for Claude.
-
-`aurelys-maquette.html` is the approved visual reference.
+The separation is deliberate: **content** lives in `data/`, **business logic** in
+`lib/`, **behaviour** in `hooks/`, **presentation** in `components/` and
+`styles/`. Replacing the placeholder photography with real AURÉLYS assets only
+requires editing `src/data/*` (and `src/lib/images.ts` to point at `/public`).
 
 ---
 

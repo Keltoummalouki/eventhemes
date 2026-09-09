@@ -1,0 +1,25 @@
+/* Menu plein écran, dévoilé par un cercle qui s'ouvre depuis le bouton. */
+
+.menu {
+  position: fixed;
+  inset: 0;
+  background: var(--noir-2);
+  z-index: 450;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  clip-path: circle(0% at 92% 5%);
+  transition: clip-path 0.6s var(--ease);
+}
+
+.open {
+  clip-path: circle(150% at 92% 5%);
+}
+
+.menu a {
+  font-family: var(--ff-display);
+  font-size: 1.8rem;
+  color: var(--blanc);
+}
