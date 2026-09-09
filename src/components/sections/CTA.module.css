@@ -1,0 +1,57 @@
+/* Appel à l'action final : grande photo, voile radial, message centré. */
+
+.cta {
+  position: relative;
+  height: 70vh;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Correction d'un défaut de la maquette : l'image y était un enfant flex en
+   flux, ce qui la réduisait à sa largeur intrinsèque et repoussait le texte
+   hors du cadre. Elle est ici replacée en fond plein cadre — la mise en page
+   voulue (photo + voile radial + contenu centré) est ainsi respectée. */
+.cta img {
+  position: absolute;
+  inset: 0;
+  filter: brightness(0.4) saturate(1.1);
+}
+
+.cta::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(10, 9, 8, 0.25), rgba(10, 9, 8, 0.9));
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 0 6vw;
+}
+
+.content h2 {
+  font-size: clamp(2rem, 4.4vw, 3.6rem);
+  font-style: italic;
+  color: var(--blanc);
+  max-width: 18ch;
+  margin: 22px auto 0;
+}
+
+.content p {
+  margin-top: 20px;
+  color: var(--blanc-doux);
+  max-width: 48ch;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.8;
+}
+
+/* Sélecteur descendant volontaire : prioritaire sur le module Button. */
+.content .ctaBtn {
+  margin-top: 36px;
+}

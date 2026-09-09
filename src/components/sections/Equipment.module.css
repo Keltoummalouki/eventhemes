@@ -1,0 +1,83 @@
+/* Parc technique : rail horizontal de vignettes verticales + jauge de progression. */
+
+.equip {
+  background: var(--anthracite);
+}
+
+.trackWrap {
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+  /* Affordance de préhension à la souris (le défilement natif couvre déjà
+     pavé tactile et écran tactile). */
+  cursor: grab;
+}
+
+.trackWrap::-webkit-scrollbar {
+  display: none;
+}
+
+.dragging {
+  cursor: grabbing;
+}
+
+.track {
+  display: flex;
+  gap: 22px;
+  width: max-content;
+  padding: 0 6vw;
+}
+
+.card {
+  width: 260px;
+  flex: none;
+}
+
+.thumb {
+  position: relative;
+  width: 260px;
+  height: 330px;
+  overflow: hidden;
+}
+
+.thumb img {
+  filter: grayscale(0.35) sepia(0.2) brightness(0.6) contrast(1.05);
+  transition: transform 0.8s var(--ease);
+}
+
+.card:hover .thumb img {
+  transform: scale(1.07);
+}
+
+.thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ligne);
+  pointer-events: none;
+}
+
+.name {
+  margin-top: 18px;
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--blanc);
+}
+
+.scrollbar {
+  margin: 36px 6vw 0;
+  height: 1px;
+  background: var(--ligne);
+  position: relative;
+}
+
+.fill {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 3px;
+  width: 16%;
+  background: var(--or);
+  transition: transform 0.1s linear;
+}

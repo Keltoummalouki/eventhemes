@@ -1,0 +1,64 @@
+/* Frise de la méthode : cinq étapes numérotées, révélées une à une. */
+
+.timeline {
+  padding: 130px 0;
+}
+
+.list {
+  position: relative;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 26px;
+  padding: 38px 0;
+  border-top: 1px solid var(--ligne);
+  position: relative;
+}
+
+.item:last-child {
+  border-bottom: 1px solid var(--ligne);
+}
+
+.num {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 2.6rem;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--or);
+  transition: color 0.5s ease;
+}
+
+.item[data-in] .num {
+  color: var(--or-clair);
+  -webkit-text-stroke: 1px var(--or-clair);
+}
+
+.body h3 {
+  font-size: 1.6rem;
+  font-style: italic;
+  color: var(--blanc);
+}
+
+.body p {
+  margin-top: 10px;
+  color: var(--blanc-doux);
+  max-width: 52ch;
+  line-height: 1.8;
+  font-size: 0.96rem;
+}
+
+.bar {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 0;
+  background: var(--or);
+  transition: width 0.8s var(--ease);
+}
+
+.item[data-in] .bar {
+  width: 100%;
+}

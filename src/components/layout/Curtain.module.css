@@ -1,0 +1,70 @@
+/* Rideau d'ouverture : deux panneaux qui s'écartent sur le monogramme. */
+
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  pointer-events: none;
+}
+
+.panel {
+  flex: 1;
+  background: var(--noir);
+  position: relative;
+  transition: transform 1.4s var(--ease);
+}
+
+.panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(var(--or-clair), var(--or-profond));
+  opacity: 0.6;
+}
+
+.left {
+  transform: translateX(0);
+}
+
+.left::after {
+  right: 0;
+}
+
+.right {
+  transform: translateX(0);
+}
+
+.right::after {
+  left: 0;
+}
+
+.mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--or);
+  letter-spacing: 0.08em;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+
+/* État ouvert */
+.opened .left {
+  transform: translateX(-101%);
+}
+
+.opened .right {
+  transform: translateX(101%);
+}
+
+.opened .mark {
+  opacity: 0;
+}

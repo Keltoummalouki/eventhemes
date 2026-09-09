@@ -1,0 +1,60 @@
+/* Bandeau de chiffres clés : quatre cellules séparées par des filets dorés. */
+
+.stats {
+  background: var(--anthracite);
+  border-top: 1px solid var(--ligne);
+  border-bottom: 1px solid var(--ligne);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+/* Sélecteur descendant volontaire : comme dans la maquette, la transition
+   propre à la cellule remplace celle de l'utilitaire `.reveal` (l'apparition
+   des chiffres est donc immédiate, seul le fond est animé au survol). */
+.grid .stat {
+  padding: 64px 30px;
+  text-align: center;
+  border-right: 1px solid var(--ligne);
+  border-bottom: 1px solid var(--ligne);
+  transition: background 0.4s ease;
+}
+
+.grid .stat:hover {
+  background: rgba(201, 166, 104, 0.05);
+}
+
+.num {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: clamp(2.4rem, 4vw, 3.3rem);
+  color: var(--or-clair);
+}
+
+.num::after {
+  content: attr(data-suffix);
+}
+
+.label {
+  margin-top: 10px;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blanc-doux);
+}
+
+@media (min-width: 800px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .grid .stat {
+    border-bottom: none;
+  }
+
+  .grid .stat:nth-child(4n) {
+    border-right: none;
+  }
+}
