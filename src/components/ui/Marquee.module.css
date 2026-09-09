@@ -1,0 +1,47 @@
+/* Bandeau défilant : le vocabulaire technique d'AURÉLYS, en continu. */
+
+.band {
+  overflow: hidden;
+  border-top: 1px solid var(--ligne);
+  border-bottom: 1px solid var(--ligne);
+  padding: 30px 0;
+  /* Les extrémités s'effacent : le ruban semble traverser la page plutôt que
+     de commencer et finir à ses bords. */
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+.ribbon {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.run {
+  display: flex;
+  align-items: center;
+  gap: 54px;
+  padding-right: 54px;
+  list-style: none;
+}
+
+.run li {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+  color: var(--blanc-doux);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 54px;
+}
+
+/* Losange doré de séparation, posé après chaque terme. */
+.run li::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  background: var(--or);
+  transform: rotate(45deg);
+  flex: none;
+}

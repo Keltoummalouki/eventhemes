@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useReveal } from '@/hooks/useReveal';
+import { useRef } from 'react';
+import { gsap, revealSafe, useGSAP } from '@/lib/motion';
 
 type StatCounterProps = {
   value: number;
@@ -10,44 +9,58 @@ type StatCounterProps = {
   className?: string;
 };
 
-/** Nombre de paliers visés pour atteindre la valeur finale. */
-const STEPS = 60;
-/** Intervalle entre deux paliers, en millisecondes. */
-const TICK_MS = 24;
+/** Durée du décompte, en secondes. */
+const COUNT_SECONDS = 2.2;
 
 /**
- * Compteur qui s'incrémente lorsque la cellule est à moitié visible.
+ * Chiffre clé qui se compte à l'entrée dans le champ.
+ *
+ * Le décompte est écrit directement dans le nœud de texte plutôt que via un
+ * état React : à soixante images par seconde et quatre compteurs simultanés,
+ * un rendu par image coûterait bien plus cher que le résultat ne le vaut. Le
+ * composant ne se réaffiche jamais après son montage, React ne réconcilie donc
+ * jamais ce nœud. Le HTML servi porte d'emblée la valeur finale : sans
+ * JavaScript, le chiffre juste est là.
+ *
  * Le suffixe (« + ») est ajouté en CSS via `content: attr(data-suffix)`.
  */
 export default function StatCounter({ value, suffix, className }: StatCounterProps) {
-  const { ref, inView } = useReveal<HTMLDivElement>(0.5);
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const [counted, setCounted] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Mouvement réduit : la valeur finale est affichée d'emblée, sans décompte.
-  const displayed = prefersReducedMotion ? (inView ? value : 0) : counted;
+  useGSAP(
+    () =>
+      revealSafe(ref, (full) => {
+        const cell = ref.current;
+        // Mouvement réduit : la valeur finale est déjà affichée, rien à faire.
+        if (!cell || !full) return;
 
-  useEffect(() => {
-    if (!inView || prefersReducedMotion) return;
+        const counter = { current: 0 };
+        cell.textContent = '0';
 
-    const step = Math.max(1, Math.round(value / STEPS));
-    let current = 0;
+        gsap.to(counter, {
+          current: value,
+          duration: COUNT_SECONDS,
+          ease: 'power2.out',
+          // Paliers entiers : aucune décimale ne doit apparaître en chemin.
+          snap: { current: 1 },
+          onUpdate: () => {
+            cell.textContent = String(Math.round(counter.current));
+          },
+          scrollTrigger: { trigger: cell, start: 'top 88%', once: true },
+        });
 
-    const timer = window.setInterval(() => {
-      current += step;
-      if (current >= value) {
-        current = value;
-        window.clearInterval(timer);
-      }
-      setCounted(current);
-    }, TICK_MS);
-
-    return () => window.clearInterval(timer);
-  }, [inView, prefersReducedMotion, value]);
+        // Démontage, ou passage en mouvement réduit pendant le décompte : le
+        // chiffre ne doit jamais rester figé sur une valeur intermédiaire.
+        return () => {
+          cell.textContent = String(value);
+        };
+      }),
+    { scope: ref, dependencies: [value], revertOnUpdate: true },
+  );
 
   return (
     <div ref={ref} className={className} data-suffix={suffix}>
-      {displayed}
+      {value}
     </div>
   );
 }

@@ -40,7 +40,11 @@
   border: 1px solid var(--ligne);
   font-size: 0.82rem;
   color: var(--blanc-doux);
-  transition: all 0.3s ease;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease,
+    background 0.3s ease,
+    transform 0.12s ease;
 }
 
 .chip.active,
@@ -50,18 +54,30 @@
   background: rgba(201, 166, 104, 0.1);
 }
 
+/* Réponse tactile à l'appui : le choix est confirmé sous le doigt avant même
+   que le montant ne se recompte. */
+.chip:active {
+  transform: scale(0.96);
+}
+
 .rangeWrap {
   display: flex;
   align-items: center;
   gap: 18px;
 }
 
+/* `--range-fill` est posé en ligne par <EventCalculator> à partir de la valeur
+   courante : la portion parcourue est dorée, le reste garde le filet discret. */
 .range {
   -webkit-appearance: none;
   appearance: none;
   flex: 1;
   height: 1px;
-  background: var(--ligne);
+  background: linear-gradient(
+    to right,
+    var(--or) 0 var(--range-fill, 0%),
+    var(--ligne) var(--range-fill, 0%) 100%
+  );
 }
 
 .range::-webkit-slider-thumb {
@@ -133,21 +149,12 @@
   font-size: clamp(2.4rem, 4vw, 3.4rem);
   color: var(--or-clair);
   line-height: 1.1;
-  transition: opacity 0.3s ease;
 }
 
-/* Le montant s'efface brièvement à chaque recalcul (60 ms, sans fondu), comme
-   dans la maquette. `step-end` maintient l'opacité à 0 pendant toute la durée
-   puis rétablit la valeur de base ; la règle globale « mouvement réduit »
-   neutralise l'effet. */
+/* Chiffres à chasse fixe : pendant le décompte, les milliers défilent sans
+   faire respirer la ligne à chaque changement de largeur de glyphe. */
 .priceValue {
-  animation: priceFlash 60ms step-end;
-}
-
-@keyframes priceFlash {
-  from {
-    opacity: 0;
-  }
+  font-variant-numeric: tabular-nums;
 }
 
 .price small {

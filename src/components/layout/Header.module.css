@@ -78,6 +78,19 @@
   display: none;
 }
 
+/* Avancement de la lecture : un filet doré tendu sous la barre. Piloté en
+   `scaleX` par GSAP (voir Header.tsx). */
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--or-profond), var(--or-clair));
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
 .burger {
   display: flex;
   flex-direction: column;
@@ -90,6 +103,20 @@
   height: 1px;
   background: var(--blanc);
   transition: all 0.35s var(--ease);
+}
+
+/* Menu ouvert : les trois filets se replient en croix. */
+.burgerOpen span:first-child {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.burgerOpen span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.burgerOpen span:last-child {
+  transform: translateY(-6px) rotate(-45deg);
 }
 
 @media (min-width: 960px) {

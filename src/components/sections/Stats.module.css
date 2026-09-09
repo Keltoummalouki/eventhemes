@@ -11,10 +11,9 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
-/* Sélecteur descendant volontaire : comme dans la maquette, la transition
-   propre à la cellule remplace celle de l'utilitaire `.reveal` (l'apparition
-   des chiffres est donc immédiate, seul le fond est animé au survol). */
-.grid .stat {
+/* L'apparition décalée des cellules est portée par <Reveal stagger> ; il ne
+   reste ici que la réaction au survol. */
+.stat {
   padding: 64px 30px;
   text-align: center;
   border-right: 1px solid var(--ligne);
@@ -22,7 +21,7 @@
   transition: background 0.4s ease;
 }
 
-.grid .stat:hover {
+.stat:hover {
   background: rgba(201, 166, 104, 0.05);
 }
 
@@ -50,11 +49,11 @@
     grid-template-columns: repeat(4, 1fr);
   }
 
-  .grid .stat {
+  .stat {
     border-bottom: none;
   }
 
-  .grid .stat:nth-child(4n) {
+  .stat:nth-child(4n) {
     border-right: none;
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import Button from '@/components/ui/Button';
 import Eyebrow from '@/components/ui/Eyebrow';
@@ -18,8 +18,12 @@ import {
   type Venue,
 } from '@/data/calculator';
 import { cx } from '@/lib/cx';
+import { gsap, prefersReducedMotion, useGSAP } from '@/lib/motion';
 import { estimateBudget, formatMAD } from '@/lib/pricing';
 import styles from './EventCalculator.module.css';
+
+/** Durée du recomptage du montant, en secondes. */
+const RECOUNT_SECONDS = 0.7;
 
 type ChipProps = {
   children: ReactNode;
@@ -60,6 +64,46 @@ export default function EventCalculator() {
     );
   };
 
+  /** Position du curseur d'invités, pour la portion dorée du rail. */
+  const guestsRatio = (guests - GUESTS_RANGE.min) / (GUESTS_RANGE.max - GUESTS_RANGE.min);
+
+  const amountRef = useRef<HTMLSpanElement>(null);
+  /** Valeur réellement affichée : un nouveau réglage repart d'où le précédent s'est arrêté. */
+  const shown = useRef({ amount: price });
+
+  /**
+   * Le montant se recompte au lieu de sauter d'un chiffre à l'autre.
+   *
+   * C'est ce qui rend le simulateur lisible : le visiteur voit dans quel sens
+   * et de combien son choix déplace l'estimation, plutôt que de devoir comparer
+   * deux nombres de mémoire.
+   */
+  useGSAP(
+    () => {
+      const amount = amountRef.current;
+      if (!amount) return;
+
+      if (prefersReducedMotion()) {
+        shown.current.amount = price;
+        amount.textContent = formatMAD(price);
+        return;
+      }
+
+      gsap.to(shown.current, {
+        amount: price,
+        duration: RECOUNT_SECONDS,
+        ease: 'power2.out',
+        // Un réglage peut en chasser un autre (glissement du curseur d'invités) :
+        // le décompte en cours cède la place plutôt que de s'additionner.
+        overwrite: true,
+        onUpdate: () => {
+          amount.textContent = formatMAD(shown.current.amount);
+        },
+      });
+    },
+    { dependencies: [price] },
+  );
+
   return (
     <section className={cx('section-pad', styles.calc)} id="calculateur">
       <div className="container">
@@ -92,6 +136,9 @@ export default function EventCalculator() {
                 <input
                   id="calc-invites"
                   className={styles.range}
+                  // La portion parcourue du rail se colore en or : le curseur
+                  // n'est plus un point isolé sur un filet, il a une course.
+                  style={{ '--range-fill': `${guestsRatio * 100}%` } as React.CSSProperties}
                   type="range"
                   min={GUESTS_RANGE.min}
                   max={GUESTS_RANGE.max}
@@ -160,15 +207,19 @@ export default function EventCalculator() {
 
           <div className={styles.result}>
             <Eyebrow className={styles.resultEyebrow}>Aperçu</Eyebrow>
-            {/* La zone vivante est portée par le conteneur stable : le montant,
-                lui, est remonté à chaque changement (`key`) pour relancer son
-                animation de rafraîchissement. */}
-            <div className={styles.price} aria-live="polite" aria-atomic="true">
+            {/* Le montant visible est réécrit image par image par le décompte
+                GSAP : le placer dans une zone vivante ferait énoncer chacune
+                des valeurs intermédiaires. L'annonce est donc confiée au
+                doublon ci-dessous, qui ne porte que le résultat. */}
+            <div className={styles.price} aria-hidden="true">
               <small>Budget estimatif</small>
-              <span key={price} className={styles.priceValue}>
-                À partir de {formatMAD(price)}
+              <span className={styles.priceValue}>
+                À partir de <span ref={amountRef}>{formatMAD(price)}</span>
               </span>
             </div>
+            <p className="visually-hidden" aria-live="polite" aria-atomic="true">
+              Budget estimatif : à partir de {formatMAD(price)}
+            </p>
             <p className={styles.note}>
               Cette estimation évolue selon vos choix. Elle sera affinée avec vous lors d&apos;un échange
               personnalisé avec notre équipe.

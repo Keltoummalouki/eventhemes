@@ -412,16 +412,17 @@ AURELYS/
 └── src/
     ├── app/                   Layout, page composition, fonts, metadata, favicon
     ├── components/
-    │   ├── layout/            Curtain, Header, MobileMenu, Footer
+    │   ├── layout/            Curtain, Header, MobileMenu, Footer, MotionRoot
     │   ├── sections/          Hero, Stats, Services, Equipment, ProcessTimeline,
     │   │                      Gallery, Testimonials, EventCalculator, CTA
     │   └── ui/                Button, Eyebrow, SectionHeader, Divider, Reveal,
-    │                          SmartImage, icons
+    │                          RevealText, Marquee, SmartImage, icons
     ├── data/                  All repeated content (services, equipment, gallery,
-    │                          testimonials, navigation, calculator options)
-    ├── hooks/                 useReveal, useCarousel, useScrolled,
-    │                          usePrefersReducedMotion
-    ├── lib/                   Pricing logic, image URL builders, class helper
+    │                          testimonials, navigation, calculator options,
+    │                          marquee terms)
+    ├── hooks/                 useCarousel, useScrolled
+    ├── lib/                   Motion core (GSAP), pricing logic, image URL
+    │                          builders, intro relay, class helper
     └── styles/                Design tokens, global base, shared utilities
 ```
 
@@ -429,6 +430,31 @@ The separation is deliberate: **content** lives in `data/`, **business logic** i
 `lib/`, **behaviour** in `hooks/`, **presentation** in `components/` and
 `styles/`. Replacing the placeholder photography with real AURÉLYS assets only
 requires editing `src/data/*` (and `src/lib/images.ts` to point at `/public`).
+
+### Motion
+
+All animation goes through `src/lib/motion.ts`. It registers the GSAP plugins
+once, exposes the shared motion vocabulary (`MOTION` — durations, easings,
+amplitudes) that gives every section the same rhythm, and provides the two
+guards every animation is written against:
+
+| Helper | Use for | Behaviour when motion is reduced |
+| --- | --- | --- |
+| `motionSafe` | Ornament (parallax, marquee, magnetic buttons, pinning) | The effect is never created |
+| `revealSafe` | Content that appears on scroll | Content is shown immediately, unanimated |
+
+Two rules keep this maintainable:
+
+1. **Always `fromTo`, never `from`.** `from` infers its end state from the DOM,
+   so a second run of the effect — React Strict Mode, hot reload, a SplitText
+   re-split — reads the hidden state left by the first and animates from
+   nothing to nothing.
+2. **One property, one owner.** Where CSS already animates a transform on hover,
+   GSAP animates a wrapper layer instead (`.frame`, `.pan`, `.backdrop`) rather
+   than fighting over the same inline style.
+
+`prefers-reduced-motion` is honoured throughout, and the pinned horizontal rail
+in *Nos équipements* falls back to native horizontal scrolling below 960px.
 
 ---
 

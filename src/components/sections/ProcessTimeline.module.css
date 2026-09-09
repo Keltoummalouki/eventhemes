@@ -8,6 +8,27 @@
   position: relative;
 }
 
+/* Filet vertical du parcours, placé dans la gouttière qui sépare les numéros
+   des intitulés (colonne de 90 px + moitié de la gouttière de 26 px). */
+.spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(90px + 13px);
+  width: 1px;
+  background: var(--ligne);
+  pointer-events: none;
+}
+
+/* Part déjà parcourue : `scaleY` est piloté par la position de défilement.
+   Sans JavaScript le filet reste simplement complet. */
+.spineFill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(var(--or-clair), var(--or));
+  transform-origin: top center;
+}
+
 .item {
   display: grid;
   grid-template-columns: 90px 1fr;

@@ -11,12 +11,17 @@
   gap: 14px;
 }
 
+/* Le filet est tracé de gauche à droite à l'entrée de la section : la variable
+   `--aurelys-rule` est animée de 0 à 1 par <SectionHeader>. En son absence — pas
+   de JavaScript, ou mouvement réduit — le filet est simplement complet. */
 .eyebrow::before {
   content: '';
   width: 28px;
   height: 1px;
   background: var(--or);
   display: inline-block;
+  transform: scaleX(var(--aurelys-rule, 1));
+  transform-origin: left center;
 }
 
 .centered {

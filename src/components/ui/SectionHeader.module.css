@@ -13,7 +13,14 @@
   line-height: 1.15;
 }
 
-.head p {
+/* Le filet doré du sur-titre se dessine à l'entrée : GSAP anime cette variable
+   de 0 à 1 (voir SectionHeader.tsx). Sa valeur de repos garantit un filet
+   complet si l'animation ne joue pas. */
+.eyebrow {
+  --aurelys-rule: 1;
+}
+
+.lede {
   margin-top: 20px;
   color: var(--blanc-doux);
   font-size: 1rem;
@@ -25,4 +32,9 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
+}
+
+.centered .lede {
+  margin-left: auto;
+  margin-right: auto;
 }
