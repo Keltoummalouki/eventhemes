@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import { useEventheme } from '@/components/eventheme/Provider';
 import Butterflies from '@/components/ui/Butterflies';
 import Button from '@/components/ui/Button';
-import { SocialIcon } from '@/components/ui/icons';
+import { ArrowUpRightIcon, SocialIcon } from '@/components/ui/icons';
 import { heroSlides } from '@/data/eventheme';
 import { useCarousel } from '@/hooks/useCarousel';
 import { cx } from '@/lib/cx';
@@ -185,10 +185,10 @@ export default function Hero() {
         </h1>
         {home?.description && <p className={styles.lede}>{home.description}</p>}
         <div className={styles.actions}>
-          <Button href="#devis" icon="↗" magnetic>
+          <Button href="#devis" icon={<ArrowUpRightIcon />} magnetic>
             Configurer mon événement
           </Button>
-          <Button href="#services" variant="ghost">
+          <Button href="#services" variant="ghost" className={styles.secondary}>
             Découvrir nos services
           </Button>
         </div>

@@ -84,3 +84,16 @@
 .skip-link:focus-visible {
   transform: translate(-50%, 0);
 }
+
+/* --------------------------------------------------------------------------
+   Pictogramme en ligne
+   Les flèches « ↗ » de fin de lien sont des SVG et non des caractères : iOS
+   applique une présentation émoji à U+2197, qui arrivait en bleu Apple au
+   milieu de l'or. Le tracé suit donc la taille et la couleur du texte voisin.
+   -------------------------------------------------------------------------- */
+.inline-icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  vertical-align: -0.14em;
+}

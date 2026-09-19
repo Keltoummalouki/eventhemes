@@ -13,6 +13,7 @@ import { useEventheme, useQuote } from "./Provider";
 import QuoteConfigurator from "./QuoteConfigurator";
 import QuoteDocument from "./QuoteDocument";
 import s from "./QuoteStudio.module.css";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONTACT_METHODS = ["Téléphone", "WhatsApp", "E-mail"];
@@ -237,7 +238,7 @@ export default function QuoteStudio({
                   <br />
                   Vous préférez écrire ?{" "}
                   <a href={whatsapp.url} target="_blank" rel="noreferrer">
-                    Échangeons sur WhatsApp ↗
+                    Échangeons sur WhatsApp <ArrowUpRightIcon className="inline-icon" />
                   </a>
                 </>
               )}
@@ -344,7 +345,7 @@ export default function QuoteStudio({
                   {error}
                 </p>
               )}
-              <Button type="submit" loading={busy} icon="↗" block magnetic>
+              <Button type="submit" loading={busy} icon={<ArrowUpRightIcon />} block magnetic>
                 {busy ? "Envoi…" : "Être recontacté"}
               </Button>
               <p className={s.caption}>
@@ -373,7 +374,7 @@ export default function QuoteStudio({
                 <li>Votre demande reste enregistrée, quoi que vous choisissiez</li>
               </ul>
               <div className={s.inviteActions}>
-                <Button icon="↗" magnetic onClick={() => go("configure")}>
+                <Button icon={<ArrowUpRightIcon />} magnetic onClick={() => go("configure")}>
                   Personnaliser mon événement
                 </Button>
                 {phase === "invite" && (

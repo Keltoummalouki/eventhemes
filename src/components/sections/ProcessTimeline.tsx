@@ -7,6 +7,7 @@ import SectionHeader from '@/components/ui/SectionHeader';
 import { methodSteps } from '@/data/eventheme';
 import { gsap, revealSafe, useGSAP } from '@/lib/motion';
 import styles from './ProcessTimeline.module.css';
+import { ArrowUpRightIcon } from '@/components/ui/icons';
 
 /**
  * « Notre méthode » — les sept temps de la collaboration.
@@ -57,7 +58,7 @@ export default function ProcessTimeline() {
             }
             description="Un accompagnement structuré, du premier échange au suivi après l’événement."
           />
-          <Button href="#devis" variant="outline" icon="↗">
+          <Button href="#devis" variant="outline" icon={<ArrowUpRightIcon />}>
             Commencer l’échange
           </Button>
         </div>

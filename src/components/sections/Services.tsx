@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { useEventheme } from '@/components/eventheme/Provider';
 import Button from '@/components/ui/Button';
 import SectionHeader from '@/components/ui/SectionHeader';
-import { CheckIcon } from '@/components/ui/icons';
+import { ArrowUpRightIcon, CheckIcon } from '@/components/ui/icons';
 import { serviceItems } from '@/data/eventheme';
 import { cx } from '@/lib/cx';
 import { gsap, MOTION, revealSafe, useGSAP } from '@/lib/motion';
@@ -69,7 +69,7 @@ export default function Services() {
         }
         description="Un accompagnement complet ou une expertise à la carte : composez les prestations qui donneront vie à votre événement."
         action={
-          <Button href="/services" variant="link" icon="↗">
+          <Button href="/services" variant="link" icon={<ArrowUpRightIcon />}>
             Tous nos services
           </Button>
         }
@@ -117,7 +117,7 @@ export default function Services() {
                   >
                     {chosen ? 'Dans mon devis' : 'Ajouter à mon devis'}
                   </Button>
-                  <Button href="/services" variant="link" size="sm" icon="↗">
+                  <Button href="/services" variant="link" size="sm" icon={<ArrowUpRightIcon />}>
                     En savoir plus
                   </Button>
                 </div>

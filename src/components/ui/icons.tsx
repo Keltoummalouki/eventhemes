@@ -38,6 +38,20 @@ function Glyph({ className, children }: IconProps & { children: React.ReactNode 
   );
 }
 
+/**
+ * Flèche oblique « ouvrir / poursuivre » des boutons et des liens.
+ *
+ * Tracée en SVG et non avec le caractère « ↗ » (U+2197) : iOS lui applique une
+ * présentation émoji, et le glyphe arrivait en bleu Apple au milieu de l'or.
+ */
+export function ArrowUpRightIcon({ className }: IconProps) {
+  return (
+    <Glyph className={className}>
+      <path d="M7.5 16.5 16.5 7.5M9 7.5h7.5V15" />
+    </Glyph>
+  );
+}
+
 /** Chevron vers le bas : ouverture d'une liste. Pivoté par CSS pour les autres directions. */
 export function ChevronIcon({ className }: IconProps) {
   return (

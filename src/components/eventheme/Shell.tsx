@@ -11,6 +11,7 @@ import { gsap, motionSafe, useGSAP } from "@/lib/motion";
 import { useEventheme } from "./Provider";
 import Button from "@/components/ui/Button";
 import s from "./Eventheme.module.css";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 export function Logo() {
   return (
     <img
@@ -23,7 +24,7 @@ export function Logo() {
   );
 }
 export function Arrow() {
-  return <span aria-hidden="true">↗</span>;
+  return <ArrowUpRightIcon className="inline-icon" />;
 }
 export default function Shell({ children }: { children: ReactNode }) {
   const path = usePathname();
@@ -80,7 +81,7 @@ export default function Shell({ children }: { children: ReactNode }) {
       href={quoteHref}
       variant="outline"
       size="sm"
-      icon="↗"
+      icon={<ArrowUpRightIcon />}
       className={s.quoteButton}
       onClick={() => setOpen(false)}
     >
@@ -140,7 +141,7 @@ export default function Shell({ children }: { children: ReactNode }) {
         socials={socials}
         onNavigate={() => setOpen(false)}
         action={
-          <Button href={quoteHref} icon="↗" onClick={() => setOpen(false)}>
+          <Button href={quoteHref} icon={<ArrowUpRightIcon />} onClick={() => setOpen(false)}>
             Mon devis {count > 0 && `(${count})`}
           </Button>
         }
@@ -153,7 +154,7 @@ export default function Shell({ children }: { children: ReactNode }) {
             <br />
             <em>Notre savoir-faire.</em>
           </p>
-          <Button href={quoteHref} icon="↗">
+          <Button href={quoteHref} icon={<ArrowUpRightIcon />}>
             Demander un devis
           </Button>
         </div>
@@ -197,7 +198,7 @@ export default function Shell({ children }: { children: ReactNode }) {
                 target={e.url?.startsWith("https") ? "_blank" : undefined}
                 rel="noreferrer"
               >
-                {e.title} ↗
+                {e.title} <ArrowUpRightIcon className="inline-icon" />
               </a>
             ))}
           </div>
@@ -208,7 +209,9 @@ export default function Shell({ children }: { children: ReactNode }) {
           </span>
           <Link href="/mentions-legales">Mentions légales</Link>
           <Link href="/politique-de-confidentialite">Confidentialité</Link>
-          <Link href="/admin">Administration ↗</Link>
+          <Link href="/admin">
+            Administration <ArrowUpRightIcon className="inline-icon" />
+          </Link>
         </div>
       </footer>
       <div
@@ -232,7 +235,7 @@ export function CTA() {
         <em>prochain événement.</em>
       </h2>
       <div className={s.actions}>
-        <Button href="/devis" icon="↗" magnetic>
+        <Button href="/devis" icon={<ArrowUpRightIcon />} magnetic>
           Demander un devis
         </Button>
         {whatsapp?.url && (
@@ -241,7 +244,7 @@ export function CTA() {
             href={whatsapp.url}
             target="_blank"
             rel="noreferrer"
-            icon="↗"
+            icon={<ArrowUpRightIcon />}
           >
             Nous contacter sur WhatsApp
           </Button>

@@ -10,6 +10,7 @@ import { cx } from '@/lib/cx';
 import { priceLabel } from '@/lib/eventheme/types';
 import { DESKTOP, FULL_MOTION, gsap, motionSafe, useGSAP } from '@/lib/motion';
 import styles from './Rental.module.css';
+import { ArrowUpRightIcon } from '@/components/ui/icons';
 
 /** Part de la jauge déjà remplie au repos. */
 const FILL_MIN = 0.12;
@@ -156,7 +157,7 @@ export default function Rental() {
             }
             description="Mobilier, décoration, lumière, son et image : composez votre sélection et ajoutez-la directement à votre devis."
             action={
-              <Button href="/location" variant="link" icon="↗">
+              <Button href="/location" variant="link" icon={<ArrowUpRightIcon />}>
                 Tout le catalogue
               </Button>
             }
@@ -211,7 +212,7 @@ export default function Rental() {
                 <em>catalogue</em>
               </span>
               <span className={styles.moreArrow} aria-hidden="true">
-                ↗
+                <ArrowUpRightIcon />
               </span>
             </Link>
           </div>

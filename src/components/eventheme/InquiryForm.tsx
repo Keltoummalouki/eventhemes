@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/form";
 import { followersLabel } from "@/lib/eventheme/types";
 import s from "./Eventheme.module.css";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 const contactMethods = ["WhatsApp", "Téléphone", "E-mail"].map((value) => ({
   value,
   label: value,
@@ -83,7 +84,7 @@ export default function InquiryForm() {
             : "Notre équipe vous répondra dans les meilleurs délais."}
         </p>
         <p className={s.caption}>Référence : {sent.slice(0, 8).toUpperCase()}</p>
-        <Button href="/" icon="↗" className={s.successAction}>
+        <Button href="/" icon={<ArrowUpRightIcon />} className={s.successAction}>
           Retour à l’accueil
         </Button>
       </section>
@@ -194,7 +195,7 @@ export default function InquiryForm() {
             </p>
           )}
           <div className={s.formActions}>
-            <Button type="submit" loading={busy} icon="↗">
+            <Button type="submit" loading={busy} icon={<ArrowUpRightIcon />}>
               {busy ? "Envoi…" : "Envoyer mon message"}
             </Button>
           </div>
@@ -206,7 +207,7 @@ export default function InquiryForm() {
             Un projet précis ? Composez votre événement et recevez votre devis
             estimatif.
           </p>
-          <Button href="/devis" variant="link" icon="↗">
+          <Button href="/devis" variant="link" icon={<ArrowUpRightIcon />}>
             Mon devis
           </Button>
           {entries

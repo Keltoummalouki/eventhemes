@@ -10,7 +10,7 @@ import {
   SearchInput,
   Select,
 } from "@/components/ui/form";
-import { CheckIcon } from "@/components/ui/icons";
+import { ArrowUpRightIcon, CheckIcon } from "@/components/ui/icons";
 import { methodSteps } from "@/data/eventheme";
 import {
   centimetres,
@@ -176,7 +176,7 @@ export function Catalog({ projects = false }: { projects?: boolean }) {
                       href={`/realisations/${item.id}`}
                       variant="link"
                       size="sm"
-                      icon="↗"
+                      icon={<ArrowUpRightIcon />}
                     >
                       Découvrir
                     </Button>
@@ -286,7 +286,7 @@ export function Events() {
                 <Button
                   href={`/devis?event=${e.id}`}
                   variant="link"
-                  icon="↗"
+                  icon={<ArrowUpRightIcon />}
                 >
                   Imaginer cet événement
                 </Button>
@@ -426,7 +426,7 @@ export function Detail({ entry }: { entry: Entry }) {
               </Button>
             )}
             {!product && (
-              <Button href="/devis" icon="↗">
+              <Button href="/devis" icon={<ArrowUpRightIcon />}>
                 Imaginer mon événement
               </Button>
             )}
@@ -436,7 +436,7 @@ export function Detail({ entry }: { entry: Entry }) {
                 href={whatsapp.url}
                 target="_blank"
                 rel="noreferrer"
-                icon="↗"
+                icon={<ArrowUpRightIcon />}
               >
                 En parler sur WhatsApp
               </Button>
@@ -447,7 +447,7 @@ export function Detail({ entry }: { entry: Entry }) {
                 href={entry.video}
                 target="_blank"
                 rel="noreferrer"
-                icon="↗"
+                icon={<ArrowUpRightIcon />}
               >
                 Voir la vidéo
               </Button>

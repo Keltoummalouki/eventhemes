@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { cx } from '@/lib/cx';
+import { ArrowUpRightIcon } from '@/components/ui/icons';
 import styles from './MobileMenu.module.css';
 
 type MobileMenuProps = {
@@ -45,7 +46,7 @@ export default function MobileMenu({ id, open, links, current, action, socials, 
         <div className={styles.socials}>
           {socials.map((social) => (
             <a key={social.id} href={social.url} target="_blank" rel="noreferrer" onClick={onNavigate}>
-              {social.title} ↗
+              {social.title} <ArrowUpRightIcon className="inline-icon" />
             </a>
           ))}
         </div>

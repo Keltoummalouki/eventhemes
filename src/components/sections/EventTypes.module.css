@@ -80,9 +80,16 @@
 
 .arrow {
   justify-self: end;
+  display: grid;
   color: var(--or);
   font-size: 1.1rem;
   transition: transform 0.5s var(--ease);
+}
+
+/* Un SVG sans dimensions retomberait sur les 300 x 150 px par défaut. */
+.arrow svg {
+  width: 1em;
+  height: 1em;
 }
 
 .row:hover::after,
