@@ -1,0 +1,153 @@
+/* ==========================================================================
+   Boîte de dialogue SweetAlert — habillage EVENTHEME.
+   Les sélecteurs de SweetAlert passent par :where() : une seule classe
+   suffit à les remplacer, sans !important.
+   ========================================================================== */
+
+.popup {
+  width: min(460px, calc(100vw - 32px));
+  padding: 40px 32px 32px;
+  border: 1px solid var(--ligne);
+  border-radius: 0;
+  background: var(--noir-2);
+  box-shadow: var(--panneau-ombre);
+  color: var(--blanc);
+  font-family: var(--ff-body);
+}
+
+/* Filet doré en tête, comme les panneaux de l'administration. */
+.popup::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 56px;
+  height: 1px;
+  background: var(--or);
+  transform: translateX(-50%);
+}
+
+.title {
+  padding: 0;
+  color: var(--blanc);
+  font-family: var(--ff-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.text {
+  margin: 16px 0 0;
+  padding: 0;
+  color: var(--gris);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.actions {
+  gap: 12px;
+  width: 100%;
+  margin: 32px 0 0;
+}
+
+.button {
+  min-height: 44px;
+  margin: 0;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  border-radius: 0;
+  font-family: var(--ff-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    background-color 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+
+.confirm {
+  background: var(--or);
+  border-color: var(--or);
+  color: var(--noir);
+}
+
+.cancel {
+  background: transparent;
+  border-color: var(--champ-filet);
+  color: var(--blanc);
+}
+
+/* Confirmation destructrice (« Supprimer ») : texte et filet rouges. */
+.danger {
+  background: transparent;
+  border-color: var(--rouge);
+  color: var(--rouge);
+}
+
+@media (hover: hover) {
+  .confirm:hover {
+    background: var(--or-clair);
+    border-color: var(--or-clair);
+  }
+
+  .danger:hover {
+    background: var(--rouge-voile);
+  }
+
+  .cancel:hover {
+    border-color: var(--or);
+    color: var(--or-clair);
+  }
+}
+
+/* Sur téléphone, les boutons s'empilent et occupent toute la largeur. */
+@media (max-width: 480px) {
+  .popup {
+    padding: 36px 20px 24px;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .button {
+    width: 100%;
+  }
+}
+
+/* --- Apparition ---------------------------------------------------------- */
+
+.show {
+  animation: dialog-in 0.35s var(--ease);
+}
+
+.hide {
+  animation: dialog-out 0.2s ease-in forwards;
+}
+
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dialog-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Sans animation, SweetAlert ferme immédiatement la boîte. */
+@media (prefers-reduced-motion: reduce) {
+  .show,
+  .hide {
+    animation: none;
+  }
+}

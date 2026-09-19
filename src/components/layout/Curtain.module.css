@@ -1,6 +1,6 @@
-/* Rideau d'ouverture : deux panneaux qui s'écartent sur le monogramme.
-   Les états sont désormais pilotés par la frise GSAP de <Curtain> ; le CSS ne
-   décrit plus que la position de départ. */
+/* Rideau d'ouverture : deux panneaux qui s'écartent sur le logo.
+   Les états sont pilotés par la frise GSAP de <Curtain> ; le CSS ne décrit que
+   la position de départ. */
 
 .curtain {
   position: fixed;
@@ -21,9 +21,9 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 2px;
-  background: linear-gradient(var(--or-clair), var(--or-profond));
-  opacity: 0.6;
+  width: 1px;
+  background: linear-gradient(transparent, var(--or-clair) 30%, var(--or-profond) 70%, transparent);
+  opacity: 0.7;
 }
 
 .left::after {
@@ -38,11 +38,25 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  font-family: var(--ff-display);
-  font-style: italic;
-  font-size: 1.6rem;
-  color: var(--or);
-  letter-spacing: 0.08em;
   z-index: 2;
+  width: min(260px, 60vw);
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+}
+
+.mark img {
+  width: 100%;
+  height: auto;
+  /* Le logo PNG a un grand fond transparent : on recadre sur la signature. */
+  aspect-ratio: 2.2;
+  object-fit: cover;
+}
+
+/* Reflet qui balaie le logo, comme la lumière sur une feuille d'or. */
+.shine {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 30%, rgba(245, 241, 232, 0.55) 50%, transparent 70%);
+  mix-blend-mode: overlay;
+  transform: translateX(-120%);
 }

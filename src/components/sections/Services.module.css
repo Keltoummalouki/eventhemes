@@ -1,121 +1,203 @@
-/* Catalogue des savoir-faire : grille pleine largeur, filets dorés en fond. */
+/* Services : panneaux qui s'ouvrent au survol (grand écran), empilés (mobile). */
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 2px;
-  background: var(--ligne);
+.root {
+  padding: clamp(96px, 11vw, 150px) 6vw;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
-.card {
+.panels {
+  display: flex;
+  gap: 10px;
+  height: clamp(560px, 78vh, 700px);
+}
+
+.panel {
   position: relative;
-  background: var(--noir);
-  aspect-ratio: 3 / 3.6;
+  flex: 1 1 0;
+  min-width: 0;
   overflow: hidden;
+  cursor: pointer;
+  background: var(--noir-2);
+  transition: flex-grow 0.9s var(--ease);
 }
 
-/* Calque animé à l'entrée dans le champ (voir Services.tsx). Il laisse à
-   l'image sa propre transformation, réservée au survol. */
-.frame {
+.active {
+  flex-grow: 3.4;
+  cursor: default;
+}
+
+.media {
   position: absolute;
   inset: 0;
 }
 
-.card img {
-  position: absolute;
-  inset: 0;
-  filter: grayscale(0.25) sepia(0.22) saturate(1.25) brightness(0.55) contrast(1.05);
+.media img {
+  filter: grayscale(0.25) sepia(0.2) saturate(1.2) brightness(0.5) contrast(1.05);
   transform: scale(1.12);
   transition:
-    transform 1.1s var(--ease),
-    filter 0.6s ease;
+    transform 1.4s var(--ease),
+    filter 0.8s ease;
 }
 
-.card:hover img {
+.active .media img {
   transform: scale(1);
-  filter: grayscale(0.05) sepia(0.15) saturate(1.3) brightness(0.62) contrast(1.05);
+  filter: grayscale(0.05) sepia(0.12) saturate(1.25) brightness(0.5) contrast(1.05);
 }
 
-.card::before {
+.panel::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 9, 8, 0.15) 0%,
-    rgba(10, 9, 8, 0.55) 60%,
-    rgba(10, 9, 8, 0.92) 100%
-  );
-  z-index: 1;
-}
-
-.body {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 2;
-  padding: 26px;
-  transform: translateY(38px);
-  transition: transform 0.5s var(--ease);
-}
-
-.card:hover .body {
-  transform: translateY(0);
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0.2) 0%, rgba(5, 5, 5, 0.45) 45%, rgba(5, 5, 5, 0.94) 100%);
+  pointer-events: none;
 }
 
 .num {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  left: 26px;
   font-family: var(--ff-display);
   font-style: italic;
+  font-size: 1.1rem;
   color: var(--or);
-  font-size: 0.9rem;
 }
 
-.body h3 {
-  font-size: 1.35rem;
-  font-style: italic;
+/* Titre vertical des panneaux repliés. */
+.spine {
+  position: absolute;
+  z-index: 2;
+  left: 26px;
+  bottom: 30px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-family: var(--ff-display);
+  font-size: clamp(1.4rem, 1.8vw, 1.9rem);
+  white-space: nowrap;
   color: var(--blanc);
-  margin-top: 8px;
+  transition: opacity 0.4s ease;
 }
 
-.desc {
-  max-height: 0;
-  overflow: hidden;
+.active .spine {
   opacity: 0;
+}
+
+/* Largeur fixe : le texte ne se recompose pas pendant l'ouverture du panneau. */
+.body {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  bottom: 0;
+  width: min(560px, 44vw);
+  padding: 34px;
+  opacity: 0;
+  /* Reste atteignable au clavier : le focus d'un bouton ouvre son panneau. */
+  pointer-events: none;
+  transform: translateY(28px);
   transition:
-    max-height 0.5s var(--ease),
-    opacity 0.4s ease 0.1s;
+    opacity 0.35s ease,
+    transform 0.5s var(--ease);
 }
 
-.card:hover .desc {
-  max-height: 80px;
+.active .body {
   opacity: 1;
+  pointer-events: auto;
+  transform: none;
+  transition:
+    opacity 0.6s ease 0.35s,
+    transform 0.9s var(--ease) 0.3s;
 }
 
-.desc p {
-  font-size: 0.86rem;
-  color: var(--blanc-doux);
-  margin-top: 10px;
-  line-height: 1.6;
-}
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
+.category {
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: var(--or-clair);
 }
 
-.link svg {
-  width: 12px;
-  height: 12px;
-  transition: transform 0.35s ease;
+.root .body h3 {
+  margin: 12px 0 14px;
+  font-size: clamp(2rem, 3vw, 2.9rem);
+  line-height: 1.05;
+  color: var(--blanc);
 }
 
-.card:hover .link svg {
-  transform: translateX(4px);
+.root .body p {
+  max-width: 46ch;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: rgba(245, 241, 232, 0.76);
+}
+
+.items {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 26px;
+}
+
+.items li {
+  padding: 6px 12px;
+  border: 1px solid rgba(228, 199, 121, 0.3);
+  font-size: 0.7rem;
+  color: rgba(245, 241, 232, 0.86);
+  background: rgba(5, 5, 5, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+/* Largeur du libellé le plus long : « Dans mon devis » ne décale pas le lien voisin. */
+.add {
+  min-width: 16em;
+}
+
+.root .caption {
+  margin-top: 16px;
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  color: var(--gris);
+}
+
+/* Écrans tactiles et étroits : pas de survol, tous les panneaux ouverts. */
+@media (max-width: 960px) {
+  .panels {
+    flex-direction: column;
+    height: auto;
+    gap: 14px;
+  }
+
+  .panel,
+  .active {
+    flex: none;
+    cursor: default;
+  }
+
+  .spine {
+    display: none;
+  }
+
+  .body,
+  .active .body {
+    position: relative;
+    width: auto;
+    padding: 110px 24px 28px;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
+  }
+
+  .media img,
+  .active .media img {
+    transform: none;
+  }
 }

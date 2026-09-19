@@ -12,7 +12,12 @@
 let opened = false;
 const waiting = new Set<() => void>();
 
-/** Appelé par <Curtain> lorsque les panneaux ont fini de s'écarter. */
+/** Le rideau s'est-il déjà ouvert depuis le chargement de la page ? */
+export function curtainOpened() {
+  return opened;
+}
+
+/** Appelé par <Curtain> lorsque les panneaux ont commencé à s'écarter. */
 export function openCurtain() {
   if (opened) return;
   opened = true;

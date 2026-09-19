@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { cx } from '@/lib/cx';
 import { gsap, MOTION, revealSafe, useGSAP } from '@/lib/motion';
 import Eyebrow from './Eyebrow';
@@ -9,12 +9,17 @@ import styles from './SectionHeader.module.css';
 
 type SectionHeaderProps = {
   eyebrow: string;
-  title: string;
-  description?: string;
-  /** Variante centrée (section « Ils nous ont fait confiance »). */
+  /** Titre de section ; un `<em>` y prend l'italique doré de la charte. */
+  title: ReactNode;
+  description?: ReactNode;
   centered?: boolean;
   /** Identifiant du titre, pour les `aria-labelledby` des sections. */
   titleId?: string;
+  /** Lien ou bouton aligné à droite du titre (« Voir tout »). */
+  action?: ReactNode;
+  /** Niveau du titre : `h1` lorsque la section ouvre une page. */
+  as?: 'h1' | 'h2';
+  className?: string;
 };
 
 /** Retard du titre : le filet doré part en premier, le titre lui répond. */
@@ -23,10 +28,10 @@ const TITLE_DELAY = 0.18;
 /**
  * En-tête commun à toutes les sections.
  *
- * Les trois éléments entrent dans l'ordre où on les lit : le filet doré du
- * sur-titre se dessine, le titre monte ligne par ligne, le chapô suit. Ce même
- * enchaînement se répète à chaque section — c'est lui qui donne à la page son
- * rythme, plutôt qu'une succession d'effets sans parenté.
+ * Les éléments entrent dans l'ordre où on les lit : le filet doré du sur-titre
+ * se dessine, le titre monte ligne par ligne, le chapô et l'action suivent. Ce
+ * même enchaînement se répète à chaque section : c'est lui qui donne à la page
+ * son rythme, plutôt qu'une succession d'effets sans parenté.
  */
 export default function SectionHeader({
   eyebrow,
@@ -34,6 +39,9 @@ export default function SectionHeader({
   description,
   centered = false,
   titleId,
+  action,
+  as = 'h2',
+  className,
 }: SectionHeaderProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -44,10 +52,10 @@ export default function SectionHeader({
         if (!head) return;
         const find = gsap.utils.selector(head);
         const rule = find(`.${styles.eyebrow}`);
-        const lede = find(`.${styles.lede}`);
+        const after = find(`.${styles.lede}, .${styles.action}`);
 
         if (!full) {
-          gsap.set([...rule, ...lede], { autoAlpha: 1, y: 0 });
+          gsap.set([...rule, ...after], { autoAlpha: 1, y: 0 });
           return;
         }
 
@@ -58,15 +66,13 @@ export default function SectionHeader({
           .timeline({ scrollTrigger: { trigger: head, start: MOTION.start, once: true } })
           .fromTo(
             rule,
-            // Le filet se déploie depuis la gauche pendant que les capitales
-            // apparaissent : un seul geste, pas deux.
-            { '--aurelys-rule': 0, autoAlpha: 0 },
-            { '--aurelys-rule': 1, autoAlpha: 1, duration: 0.85, ease: MOTION.ease },
+            { '--eyebrow-rule': 0, autoAlpha: 0 },
+            { '--eyebrow-rule': 1, autoAlpha: 1, duration: 0.85, ease: MOTION.ease },
           )
           .fromTo(
-            lede,
+            after,
             { autoAlpha: 0, y: 22 },
-            { autoAlpha: 1, y: 0, duration: MOTION.duration, ease: MOTION.ease },
+            { autoAlpha: 1, y: 0, duration: MOTION.duration, ease: MOTION.ease, stagger: 0.12 },
             TITLE_DELAY + 0.35,
           );
       }),
@@ -74,14 +80,20 @@ export default function SectionHeader({
   );
 
   return (
-    <div ref={ref} className={cx(styles.head, centered && styles.centered)}>
-      <Eyebrow centered={centered} className={styles.eyebrow}>
-        {eyebrow}
-      </Eyebrow>
-      <RevealText as="h2" id={titleId} delay={TITLE_DELAY}>
-        {title}
-      </RevealText>
-      {description ? <p className={styles.lede}>{description}</p> : null}
+    <div
+      ref={ref}
+      className={cx(styles.head, centered && styles.centered, action ? styles.withAction : undefined, className)}
+    >
+      <div className={styles.text}>
+        <Eyebrow centered={centered} className={styles.eyebrow}>
+          {eyebrow}
+        </Eyebrow>
+        <RevealText as={as} id={titleId} delay={TITLE_DELAY} className={styles.title}>
+          {title}
+        </RevealText>
+        {description ? <p className={styles.lede}>{description}</p> : null}
+      </div>
+      {action ? <div className={styles.action}>{action}</div> : null}
     </div>
   );
 }

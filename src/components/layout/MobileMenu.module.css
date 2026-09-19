@@ -3,23 +3,101 @@
 .menu {
   position: fixed;
   inset: 0;
-  background: var(--noir-2);
-  z-index: 450;
+  z-index: 25;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 30px;
-  clip-path: circle(0% at 92% 5%);
-  transition: clip-path 0.6s var(--ease);
+  justify-content: space-between;
+  gap: 32px;
+  padding: 110px 7vw 36px;
+  overflow-y: auto;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(201, 163, 78, 0.14), transparent 55%),
+    var(--noir-2);
+  clip-path: circle(0% at calc(100% - 44px) 40px);
+  transition: clip-path 0.8s var(--ease);
 }
 
 .open {
-  clip-path: circle(150% at 92% 5%);
+  clip-path: circle(150% at calc(100% - 44px) 40px);
 }
 
-.menu a {
+.links {
+  list-style: none;
+}
+
+.links li,
+.foot {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s var(--ease);
+}
+
+.open .links li,
+.open .foot {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s ease calc(0.18s + var(--i, 0) * 0.055s),
+    transform 0.9s var(--ease) calc(0.18s + var(--i, 0) * 0.055s);
+}
+
+.links a {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 7px 0;
   font-family: var(--ff-display);
-  font-size: 1.8rem;
+  font-size: clamp(2rem, 8.5vw, 3.2rem);
+  line-height: 1.1;
   color: var(--blanc);
+  transition: color 0.3s ease;
+}
+
+.links a:hover,
+.links a[aria-current='page'] {
+  color: var(--or-clair);
+}
+
+.links a[aria-current='page'] {
+  font-style: italic;
+}
+
+.index {
+  font-family: var(--ff-body);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  color: var(--or);
+}
+
+.foot {
+  display: grid;
+  gap: 22px;
+  justify-items: start;
+  padding-top: 24px;
+  border-top: 1px solid var(--ligne);
+}
+
+.socials {
+  display: flex;
+  gap: 24px;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or-clair);
+}
+
+.signature {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: rgba(245, 241, 232, 0.6);
+}
+
+/* Le menu n'existe que sur petit écran. */
+@media (min-width: 961px) {
+  .menu {
+    display: none;
+  }
 }

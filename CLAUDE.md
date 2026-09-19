@@ -1,597 +1,350 @@
-# CLAUDE.md — AURÉLYS
+# CLAUDE.md — EVENTHEME
 
 ## Project Context
 
-AURÉLYS is a premium event planning and event production agency.
+EVENTHEME is a Moroccan event company: event organisation, entertainment (_animation_), decoration and staging (_mise en scène_), and event-equipment rental.
 
-The company creates, organizes, and produces private and professional events from the first idea to the final execution.
+This repository is its official website. The site does three jobs at once:
 
-AURÉLYS is not positioned only as an event organizer. It is a complete event partner that can manage creative direction, planning, technical production, equipment, decoration, entertainment, and event-day coordination.
+- a **digital showcase** for a premium, creative, reliable brand,
+- a **commercial catalogue** of services and rental equipment,
+- a **lead-generation tool**: visitors select their needs and send a personalised quote request.
 
-The brand should communicate:
+Brand signature (use verbatim):
 
-- elegance,
-- trust,
-- creativity,
-- professionalism,
-- premium quality,
-- attention to detail,
-- emotional impact,
-- technical expertise.
+> Votre événement. Votre vision. Notre savoir-faire.
 
-The website should make visitors feel that AURÉLYS is capable of taking a simple event idea and transforming it into a complete, memorable experience.
+Target visitor journey:
 
----
+```text
+Découvrir EVENTHEME → Choisir un service → Sélectionner ses besoins → Demander un devis → Contacter l'équipe
+```
 
-## Brand Positioning
-
-AURÉLYS is positioned as a high-end event agency for clients who want an elegant, well-organized, and professionally executed event.
-
-The central brand promise is:
-
-> Nous créons des moments inoubliables.
-
-The company should feel refined and premium, but also approachable and reassuring.
-
-The experience must never feel like:
-
-- a generic SaaS website,
-- a basic corporate template,
-- a cheap event directory,
-- a simple equipment-rental catalogue.
-
-It should feel like a luxury event brand.
+Client priorities, in order: visual elegance, image quality, clarity of services, ease of requesting a quote, conversion, performance, security, scalability.
 
 ---
 
-## Target Clients
+## Sources of Truth
 
-The website serves two main audiences.
-
-### Private Clients
-
-People planning:
-
-- weddings,
-- engagements,
-- birthdays,
-- private celebrations,
-- family ceremonies,
-- premium personal events.
-
-These visitors are looking for inspiration, reassurance, quality, and a team they can trust with an important moment.
-
-### Professional Clients
-
-Companies and organizations planning:
-
-- corporate events,
-- conferences,
-- product launches,
-- gala evenings,
-- inaugurations,
-- professional ceremonies,
-- branded experiences.
-
-These visitors need reliability, organization, technical capability, and professional execution.
+1. **The EVENTHEME cahier des charges** (client specification, summarised in this file) is authoritative for brand, content, pages, features and requirements. It wins every conflict.
+2. **`aurelys-maquette .html`** (note the space in the filename) is the approved mockup from the project's earlier AURÉLYS phase. It remains the reference for layout quality, spacing, motion, interaction patterns and responsive behaviour. It is **no longer** a reference for the brand name, colours, fonts or copy.
+3. **Stack decision (user, 2026-09-18):** Next.js front-end with a Supabase backend. This replaces the WordPress / Elementor / WPCode stack named in §4 of the cahier des charges. Every other requirement of the spec still applies, including a back office usable by staff with no technical knowledge.
 
 ---
 
-## AURÉLYS Services
+## Current State of the Repository
 
-AURÉLYS offers a complete event ecosystem.
+The code is a single-page Next.js front-end that reproduces the AURÉLYS mockup. It is the starting point for EVENTHEME, not the finished product.
 
-### Event Organization
+**Still AURÉLYS and due for the rebrand:**
 
-- Organisation de mariages
-- Fiançailles
-- Anniversaires
-- Événements d'entreprise
-- Conférences
-- Inaugurations
+- name, metadata and copy (`src/data/site.ts` and the other `src/data/*` modules),
+- colour tokens (`src/styles/tokens.css`),
+- the Jost body font (`src/app/layout.tsx`), which is not one of the spec's typefaces,
+- placeholder phone, e-mail and WhatsApp number, and Unsplash/Picsum photography (`src/lib/images.ts`),
+- the `package.json` name and the git remote (`AURELYS`).
 
-### Creative Services
+**Inherited sections the EVENTHEME home page spec does not ask for:** Stats (unconfirmed figures such as « 500+ événements »), Testimonials (a future evolution in the spec), the Equipment rail, the 5-step Process timeline, and the budget simulator with its Essentiel / Signature / Prestige multipliers (`src/lib/pricing.ts`, `src/data/calculator.ts`). Don't extend them, don't present their figures as EVENTHEME facts, and ask before removing or repurposing them.
 
-- Décoration
-- Scénographie
-- Photographie
-- Production vidéo
-- DJ et animation
-- Traiteur
-- Effets spéciaux
+**Not built yet:** multi-page routing, Coming Soon page, rental catalogue, quote configurator and « Mon devis » basket, contact form, Supabase integration, admin area, e-mails, legal pages, sitemap, structured data.
 
-### Technical Production
-
-- Sonorisation
-- Éclairage
-- Écrans LED
-- Scène et structures
-- Moving Heads
-- Lasers
-- Vidéoprojecteurs
-- Structures Truss
-- Cabine DJ
-- Machines à fumée
-- Générateurs de Haze
-- Special effects equipment
-
-The website should communicate that clients can rely on AURÉLYS for both the creative and technical sides of their event.
+Rebrand what a task touches, but don't fold a codebase-wide rebrand into an unrelated change unless asked.
 
 ---
 
-## Main Website Objective
+## Brand
 
-The website has several business goals.
+### Positioning
 
-### 1. Build Brand Image
+Communicate élégance, créativité, professionnalisme, fiabilité, qualité, innovation and sens du détail. EVENTHEME must read as a professional, creative event brand in Morocco.
 
-The first impression should immediately communicate premium quality, elegance, and professionalism.
+Style: luxueux, moderne, minimaliste, cinématographique, élégant, professionnel. **Never overloaded.** The site stays mostly black, white and photographic.
 
-### 2. Explain What AURÉLYS Does
+### Colour Palette
 
-Visitors should quickly understand that AURÉLYS can organize and produce a complete event.
+| Spec name | Hex | Suggested token |
+| --- | --- | --- |
+| Noir profond | `#050505` | `--noir` |
+| Noir secondaire | `#111111` | `--noir-2` |
+| Blanc cassé | `#F5F1E8` | `--blanc` |
+| Or principal | `#C9A34E` | `--or` |
+| Or clair | `#E4C779` | `--or-clair` |
+| Bronze foncé | `#8B6914` | `--or-profond` |
+| Gris secondaire | `#A5A5A5` | `--gris` |
 
-### 3. Build Trust
+- Gold is an accent only: logo, important headings, buttons, decorative lines, prices, hover effects.
+- Transparent variants of palette colours (hairlines, overlays) are fine. New hues are not.
+- Current tokens with no spec equivalent (`--anthracite`, `--anthracite-2`, `--or-vif`, `--blanc-doux`) must be remapped or retired during the rebrand.
 
-The website should reassure visitors through:
+### Typography
 
-- experience,
-- statistics,
-- previous projects,
-- testimonials,
-- structured process,
-- professional presentation.
+- **Headings:** Bodoni Moda, Cormorant Garamond or Playfair Display. Cormorant Garamond is already loaded.
+- **Premium accents:** Cinzel (for example eyebrows, labels, small caps details).
+- **Body and UI:** Montserrat or Manrope, replacing Jost.
 
-### 4. Showcase Work
+The final choice between the allowed typefaces hasn't been made. Ask before switching fonts.
 
-Event planning is highly visual.
+### Tone
 
-The portfolio is essential because visitors want to see the type and quality of events AURÉLYS can create.
+Polished French: concise, premium, reassuring, client-focused.
 
-### 5. Generate Qualified Leads
+Never invent facts. Statistics, client names, testimonials, awards, prices and contact details appear only when EVENTHEME supplies them. Placeholder content must be obviously placeholder.
 
-The main conversion goal is to encourage visitors to:
-
-- request a quote,
-- contact AURÉLYS,
-- start configuring their event,
-- speak with the team about a project.
-
----
-
-## User Journey
-
-The ideal visitor journey is:
-
-1. Discover the AURÉLYS universe.
-2. Understand the quality and positioning of the brand.
-3. See proof of experience.
-4. Explore services.
-5. Understand the technical capabilities.
-6. Learn how the collaboration process works.
-7. View previous events.
-8. Read client testimonials.
-9. Configure an event and estimate a possible budget.
-10. Contact AURÉLYS or request a personalized quote.
-
-The website should naturally guide the visitor through this sequence.
+The site is French (`lang="fr"`). French/Arabic/English is a future evolution, so keep copy in the data layer rather than hard-coded in JSX.
 
 ---
 
-## Main Website Sections
+## Site Structure
 
-### Hero
+Main menu: **Accueil · Événements · Services · Location · Réalisations · À propos · Contact · Mon devis**. « Mon devis » is a highlighted button that stays reachable on mobile.
 
-Purpose:
+Proposed routes (clean French URLs, not created yet):
 
-- create emotion,
-- establish the luxury identity,
-- communicate the main promise,
-- guide visitors toward services or event personalization.
+| Route | Page |
+| --- | --- |
+| `/` | Accueil |
+| `/evenements` | Événements |
+| `/services` | Services |
+| `/location`, `/location/[slug]` | Catalogue, fiche produit |
+| `/realisations`, `/realisations/[slug]` | Réalisations, fiche projet |
+| `/a-propos` | À propos |
+| `/contact` | Contact |
+| `/devis` | Mon devis (configurateur) |
+| `/mentions-legales`, `/politique-de-confidentialite`, … | Legal pages |
+| `/admin` | Back office (authenticated) |
 
-Primary message:
+Before launch, the Coming Soon page replaces the public site.
 
-> Nous créons des moments inoubliables.
+---
 
-### Statistics
+## Page Requirements
 
-Purpose:
+### Coming Soon
 
-Build trust and show experience.
+- Centred EVENTHEME logo, the signature, « Quelque chose d’extraordinaire arrive. » and « L’expérience EVENTHEME arrive bientôt. »
+- Instagram and WhatsApp links.
+- Dark, luxurious design on a photographic or light video background, with discreet golden butterflies.
+- Content perfectly centred on the vertical axis at every viewport.
+- **No countdown.**
 
-Key figures:
+### Header
 
-- 500+ événements réalisés
-- 300+ clients satisfaits
-- 10+ années d'expérience
-- 50+ solutions événementielles
+Logo, main menu, « Mon devis » button, WhatsApp link (in the header or mobile menu), hamburger menu on mobile, transparent or dark background, sticky with an elegant transition on scroll.
+
+### Accueil
+
+1. **Hero:** high-quality event image or video, dark overlay, signature, short introduction, buttons « CONFIGURER MON ÉVÉNEMENT » and « DÉCOUVRIR NOS SERVICES », WhatsApp link.
+2. **Présentation rapide:** who EVENTHEME is, what it does, why choose it. Button to À propos.
+3. **Services principaux:** Organisation (complete or partial), Animation (children, adults, companies, institutions), Location (equipment, furniture, lighting, accessories).
+4. **Types d'événements:** Anniversaires, Mariages, Fiançailles, Réceptions, Cérémonies, Événements professionnels, Team building, Conférences, Événements institutionnels, Événements pour enfants, Soirées privées, Lancements de produits.
+5. **Réalisations mises en avant:** photos and videos, each with event name, type, date or year, place and description.
+6. **CTA final:** « Parlons de votre prochain événement. » with « Demander un devis » and « Nous contacter sur WhatsApp ».
+
+### Événements
+
+Categories: privés, professionnels, institutionnels, pour enfants, culturels, promotionnels. Each has an image, a presentation, the available services, example projects and a quote button.
 
 ### Services
 
-Purpose:
+Every service item has an « Ajouter à mon devis » button.
 
-Show that AURÉLYS provides a complete event solution.
+- **Organisation événementielle:** conception du concept, planification, gestion logistique, coordination des prestataires, gestion du planning, installation et démontage, décoration, gestion technique, coordination le jour de l'événement, accompagnement personnalisé.
+- **Animation événementielle:** animation pour enfants, jeux et activités, mascottes, animateurs, présentation et prise de parole, animation micro, animation musicale, jeux interactifs, ateliers créatifs, animation pour entreprises, animation de cérémonies.
+- **Décoration et mise en scène:** décoration thématique, scénographie, arche et backdrop, décoration florale, mobilier décoratif, mise en lumière, décoration de tables, structures et éléments visuels, personnalisation selon le thème.
+- **Location de matériel:** mobilier, tables et chaises, structures, éclairage, sonorisation, écrans LED, éléments de décoration, accessoires événementiels, machines à fumée, jeux de lumière, matériel audiovisuel.
 
-Visitors should understand that they do not need to coordinate multiple separate providers for every part of the event.
+### Location (Rental Catalogue)
 
-### Equipment
+- **Product sheet:** main photo, gallery, name, category, description, technical specifications, dimensions, colour or finish, indicative price (if applicable), availability (if enabled), « Ajouter à mon devis », WhatsApp link.
+- **Categories:** Mobilier, Tables et chaises, Décoration, Éclairage, Sonorisation, Écrans et affichage, Structures, Scénographie, Accessoires, Matériel audiovisuel, Animation, Machines et effets spéciaux.
+- **Filters:** category, equipment type, colour, dimension, price range, availability (if possible).
+- **Rental details from the client:** quantity, rental date, return date, event location.
+- **Price modes:** fixed, « à partir de », sur demande, or calculated from quantity and duration. The data model must support all four.
 
-Purpose:
+Staff must be able to add products without touching code, so products live in Supabase, not in `src/data`.
 
-Demonstrate real technical production capabilities.
+### Mon devis (Quote Configurator)
 
-This is especially important for:
+The central feature of the site. It prepares a request; there is **no online payment**.
 
-- corporate clients,
-- conferences,
-- large weddings,
-- premium productions.
+1. **Type d'événement:** Anniversaire, Mariage, Fiançailles, Réception, Événement professionnel, Conférence, Team building, Événement pour enfants, Autre.
+2. **Services souhaités:** Organisation, Animation, Décoration, Location de matériel, Sonorisation, Éclairage, Écran LED, Photographie, Vidéo, Autre prestation.
+3. **Informations de l'événement:** date, start and end time, ville, lieu, nombre d'invités, budget estimatif, thème ou ambiance, informations complémentaires.
+4. **Sélection du matériel:** add a product, change its quantity, remove it, view the selection, add a remark.
+5. **Informations du client:** nom et prénom, nom de l'entreprise, téléphone, e-mail, ville, moyen de contact préféré, consentement à la politique de confidentialité.
+6. **Résumé:** event type, date, place, services, equipment and quantities, indicative budget, client details.
+7. **Envoi:** saved in Supabase (visible in the admin), e-mailed, and sendable through WhatsApp.
 
-### Process
+Items added with « Ajouter à mon devis » on Services and Location feed steps 2 and 4. That basket must persist while the visitor browses between pages.
 
-The AURÉLYS customer journey is:
+WhatsApp message (fill the brackets):
 
-1. Échange
-2. Conception
-3. Planification
-4. Installation
-5. Réalisation
+> Bonjour EVENTHEME, je souhaite demander un devis pour un événement de type [type], prévu le [date], à [ville]. Les services souhaités sont : [services]. Voici mes informations : [coordonnées].
 
-Purpose:
+Confirmation message:
 
-Reassure clients that the company follows a clear and structured process.
+> Merci pour votre demande. Notre équipe vous contactera dans les meilleurs délais afin de préparer une proposition adaptée à votre événement.
 
-### Portfolio / Réalisations
+Until Phase 2 adds automatic price calculation, the budget is the figure the client enters. Any amount shown is indicative, never a quotation.
 
-Purpose:
+### Réalisations
 
-Show real examples of the type of experiences AURÉLYS can produce.
+Photo gallery, videos, filters by event type, project detail pages, lightbox.
 
-Portfolio categories:
+Categories: mariages, anniversaires, événements professionnels, événements institutionnels, animation enfants, décoration et scénographie. Each project has a name, type, date or year, place and description.
 
-- Tous
-- Mariages
-- Entreprises
-- Conférences
-- Anniversaires
-- Événements privés
+### À propos
 
-### Testimonials
+Histoire, vision, mission, valeurs, équipe, expérience, engagements qualité, méthode de travail.
 
-Purpose:
+Collaboration steps, replacing the mockup's 5-step process:
 
-Build social proof and reinforce trust.
+1. Échange initial
+2. Analyse du besoin
+3. Proposition créative
+4. Devis personnalisé
+5. Préparation
+6. Réalisation
+7. Suivi
 
-Testimonials should represent both private and professional clients.
+### Contact
 
-### Event Configurator / Budget Simulator
+Contact form plus phone, e-mail, WhatsApp, Instagram, city of operation, opening hours and an optional Google Maps embed.
 
-This is both a user-experience feature and a lead-generation tool.
+Form fields: nom complet, e-mail, téléphone, objet, type d'événement, message, consentement à la politique de confidentialité. The form must be protected against spam, automated submissions, injection and repeated abuse.
 
-The visitor can configure:
+### Footer
 
-- event type,
-- number of guests,
-- venue type,
-- desired services,
-- service level.
+Logo, signature, short description, quick links, services, social networks, WhatsApp, contact information, mentions légales, politique de confidentialité, copyright.
 
-The result gives an indicative starting budget.
-
-The objective is not to provide a contractual price.
-
-The objective is to help visitors start thinking concretely about their event and move them toward a personalized quote.
-
-### Final CTA
-
-Purpose:
-
-Convert interested visitors into leads.
-
-The main action is:
-
-> Demander un devis
+Recommended line: « EVENTHEME — Organisation, animation et location événementielle. »
 
 ---
 
-## Brand Personality
+## Contact & Social Links
 
-AURÉLYS should feel:
+- Instagram: https://www.instagram.com/eventhemes/
+- WhatsApp: https://wa.me/message/AREDMVCCJW5GM1
 
-- elegant,
-- premium,
-- emotional,
-- sophisticated,
-- confident,
-- professional,
-- calm,
-- detail-oriented,
-- creative.
+WhatsApp appears in the header or mobile menu, the hero, Contact, the configurator, product sheets and the footer. Instagram appears in the footer, on Contact, and optionally as a stable Instagram gallery.
 
-Avoid communication that feels:
+The WhatsApp link above is a short link: its pre-filled message is fixed in the WhatsApp Business app. The configurator's per-request message needs a `https://wa.me/<number>?text=…` link, which requires the business number in international format.
 
-- too casual,
-- playful,
-- cheap,
-- aggressive,
-- overly promotional,
-- overly technical for private clients.
+Still to be supplied by EVENTHEME: phone number, e-mail address, city of operation, opening hours, logo files, real photos and videos, legal content. Don't invent them. Keep clearly marked placeholders until they arrive.
 
 ---
 
-## Content Tone
+## Back Office & Data (Supabase)
 
-The content should be written in polished French.
+Staff manage, without code: page texts, images, videos, services, categories, rental products, prices, quote requests, contact requests and social links.
 
-The voice should be:
+**Quote requests.** The admin can list every request, see client details, selected products, requested services and event date, change the status, add internal notes, export requests (if possible), and receive an e-mail for each new request.
 
-- concise,
-- premium,
-- reassuring,
-- emotional when appropriate,
-- professional,
-- client-focused.
+Statuses: `Nouvelle demande` · `En cours de traitement` · `Devis envoyé` · `Confirmé` · `Terminé` · `Annulé`.
 
-Prefer language around:
+**Automated e-mails.**
 
-- experience,
-- memories,
-- vision,
-- elegance,
-- quality,
-- personalization,
-- precision,
-- accompaniment,
-- exceptional moments.
+- To the admin: name, phone, e-mail, event type, date, place, services, selected equipment, message.
+- To the client: « Nous avons bien reçu votre demande de devis. Notre équipe EVENTHEME reviendra vers vous prochainement. »
 
-Avoid exaggerated marketing claims that cannot be supported.
+**Supabase rules.**
+
+- Row Level Security on every table. Visitors can read published content and create requests; only authenticated admins read requests or edit content.
+- Public submissions go through server code (Server Actions or Route Handlers) that validates input, applies anti-spam checks and triggers the e-mails.
+- Secret and service-role keys stay server-side. Never put them in `NEXT_PUBLIC_*` variables or client components.
+- Media (product photos, galleries, videos) lives in Supabase Storage and is served compressed.
+- Admin accounts use Supabase Auth, with no public sign-up.
+- Keep schema changes as versioned migrations in the repo.
+- The e-mail provider isn't chosen yet. Ask before adding one.
+
+Supabase is not installed yet. When it is, list the required environment variables in a committed `.env.example`.
 
 ---
 
-## Visual Identity
+## Cross-cutting Requirements
 
-The approved visual direction uses:
+### Responsive
 
-- black and anthracite backgrounds,
-- warm gold accents,
-- off-white text,
-- elegant editorial typography,
-- large premium photography,
-- subtle borders,
-- refined animations,
-- generous spacing.
+Desktop, tablet, Android phones and iPhone. Check alignment, text readability, button sizes, mobile menu, forms, galleries, configurator, animations and images. No horizontal scrolling. Central elements, especially on the Coming Soon page and heroes, stay precisely aligned on the vertical axis.
 
-Typography:
+### Animation
 
-- Cormorant Garamond for headings and display text
-- Jost for body and interface text
+Elegant, light and non-intrusive: progressive reveals, image transitions, moderate parallax, hover effects, golden lines, golden butterflies, sticky header. Animations must not slow the site and must respect `prefers-reduced-motion`.
 
-Main colors:
+### Accessibility
 
-```css
---noir: #0a0908;
---noir-2: #0f0e0b;
---anthracite: #1c1b17;
---anthracite-2: #26241e;
---or: #c9a668;
---or-clair: #e8d5a3;
---or-vif: #d9b978;
---or-profond: #8a6a2a;
---blanc: #f4efe3;
---blanc-doux: #cfc7b4;
---ligne: rgba(201, 166, 104, 0.22);
-```
+Semantic HTML, keyboard navigation, visible focus states, accessible mobile menu, labelled inputs, meaningful alt text, readable contrast (including gold on black), reduced motion.
 
-The visual experience should feel closer to a premium hospitality or luxury event brand than a standard service-company website.
+### SEO
 
----
+A title and meta description per page, one H1 per page with a clean H2/H3 hierarchy, clean URLs, XML sitemap, alt text, relevant structured data, optimised images, internal linking, Google Search Console, Google Analytics or an equivalent.
 
-## Visual Reference
+Keywords: organisation événementielle au Maroc, organisation événements Casablanca, animation événementielle Maroc, location matériel événementiel Casablanca, décoration événementielle, organisation anniversaire, animation enfants, location mobilier événementiel, événement professionnel Maroc, scénographie événementielle.
 
-The project includes:
+### Performance
 
-```text
-aurelys-maquette.html
-```
+WebP images, lazy loading, minified and deferred scripts, caching, light videos, mobile optimisation, few dependencies, good Core Web Vitals.
 
-This file represents the approved visual direction of the AURÉLYS website.
+### Security
 
-Use it as the source of truth for:
+SSL, protected and spam-resistant forms, protection against injection, personal-data protection, secure admin accounts, limited login attempts, regular backups, dependencies kept up to date, no unused packages.
 
-- layout,
-- spacing,
-- typography,
-- colors,
-- section order,
-- animations,
-- interactions,
-- responsive behavior,
-- content currently present in the design.
+### Legal
 
-Do not redesign the approved interface unless explicitly requested.
+Mentions légales, politique de confidentialité, politique cookies (if needed), conditions générales de location, conditions générales de prestation, politique d'annulation (if applicable).
 
----
-
-## Functional Scope
-
-The initial website includes:
-
-- responsive navigation,
-- mobile menu,
-- hero image slideshow,
-- animated statistics,
-- services catalogue,
-- equipment presentation,
-- process timeline,
-- filterable portfolio,
-- testimonial slider,
-- event budget simulator,
-- contact/quote CTAs,
-- social/contact information.
-
----
-
-## Event Budget Simulator
-
-The simulator gives visitors an indicative starting price.
-
-Inputs include:
-
-### Event Type
-
-- Mariage
-- Fiançailles
-- Anniversaire
-- Entreprise
-- Conférence
-
-### Number of Guests
-
-Approximately 20 to 800 guests.
-
-### Venue Type
-
-Examples include:
-
-- Domaine privé
-- Hôtel & palace
-- Salle de réception
-- Extérieur / jardin
-- Lieu personnel du client
-
-### Desired Services
-
-- Décoration
-- Sonorisation
-- Éclairage
-- Écrans LED
-- Traiteur
-- DJ
-- Photo/Vidéo
-
-### Service Level
-
-- Essentiel
-- Signature
-- Prestige
-
-Initial pricing logic:
-
-```text
-base = 8000 + guests * 95 + numberOfSelectedServices * 3200
-total = base * selectedLevelMultiplier
-```
-
-Multipliers:
-
-- Essentiel: 1
-- Signature: 1.6
-- Prestige: 2.4
-
-Round the displayed estimate to the nearest 500 MAD.
-
-The simulator must always be presented as an estimate, not a final quotation.
-
----
-
-## Product Principles
-
-When implementing or extending AURÉLYS:
-
-1. Protect the premium brand perception.
-2. Keep the visitor journey simple.
-3. Prioritize visual storytelling.
-4. Make services easy to understand.
-5. Build trust before asking for contact.
-6. Keep quote generation as the main conversion goal.
-7. Make mobile experience first-class.
-8. Avoid unnecessary complexity.
-9. Keep the visual experience elegant and restrained.
-10. Preserve consistency across all sections.
+Build the pages, but the final legal text must be validated by the owner or a qualified professional. Never present drafted legal text as final.
 
 ---
 
 ## Technical Principles
 
-The codebase should be:
+**Stack:** Next.js (App Router), React 19, TypeScript, CSS Modules with design tokens, GSAP (`gsap`, `@gsap/react`), `next/font`, and Supabase for data, auth and storage. No UI framework and no utility-class library. Avoid unnecessary dependencies.
 
-- maintainable,
-- component-based,
-- responsive,
-- accessible,
-- performant,
-- easy to extend.
+**Code organisation (keep it):**
 
-Repeated content such as services, equipment, portfolio items, testimonials, navigation links, and calculator options should be data-driven.
+- `src/data/`: static content and options (navigation, service lists, configurator options). Anything staff must edit moves to Supabase.
+- `src/lib/`: business logic, kept pure and testable (pricing, formatting, image URLs, motion core).
+- `src/hooks/`: behaviour.
+- `src/components/`: presentation, split into `layout/`, `sections/` and `ui/`.
+- `src/styles/`: tokens, base styles, utilities.
 
-Avoid unnecessary dependencies.
+Repeated content (services, products, event types, projects, navigation, configurator options) is data-driven, never hard-coded in JSX.
 
-Animations should favor:
+**Motion rules** (see `src/lib/motion.ts`):
 
-- transform,
-- opacity,
-- native browser behavior.
+- Ornamental effects go through `motionSafe`. Content revealed on scroll goes through `revealSafe`.
+- Always `fromTo`, never `from`.
+- One property, one owner: if CSS animates a transform, GSAP animates a wrapper layer.
+- Animate `transform` and `opacity`.
 
-Respect:
-
-```css
-@media (prefers-reduced-motion: reduce)
-```
+**Checks:** run `npm run lint` and `npm run typecheck` before calling work done. Use `npm run build` for anything touching routing, metadata or server code.
 
 ---
 
-## Accessibility
+## Scope & Phases
 
-The premium visual style must remain usable.
+- **Phase 1:** design, main pages, services, rental catalogue, contact, WhatsApp integration.
+- **Phase 2:** advanced quote configurator, automatic price calculation, stock management, reservations.
 
-Support:
+The spec calls the configurator the central feature, so a basic version is expected before Phase 2 makes it advanced.
 
-- semantic HTML,
-- keyboard navigation,
-- visible focus states,
-- accessible mobile navigation,
-- labels for inputs,
-- appropriate alt text,
-- reduced motion,
-- readable contrast.
+**Future evolutions (don't implement unless asked):** online payment, equipment booking, automatic availability checks, client area, invoicing, PDF quote generation, contracts, booking calendar, advanced stock management, French/Arabic/English, blog, client testimonials, appointment booking, partner or supplier area.
 
 ---
 
-## Future Evolution
+## Definition of Done
 
-The project may later evolve with features such as:
+Before delivery, test all links and buttons, desktop and mobile menus, forms and e-mail sending, the configurator, adding and removing products, WhatsApp and Instagram links, galleries, animations, responsive display, speed and basic security, in Chrome, Firefox, Safari and Edge.
 
-- real contact forms,
-- quote requests,
-- WhatsApp integration,
-- portfolio project pages,
-- event detail pages,
-- CMS-managed content,
-- multilingual support,
-- real pricing configuration,
-- CRM integration,
-- admin management,
-- analytics,
-- SEO improvements.
-
-Do not implement these automatically unless requested.
-
-The initial objective is to deliver the public AURÉLYS brand website and its current approved experience.
+Launch also covers the domain, hosting, SSL, the production Supabase project, admin accounts, e-mail configuration, Search Console, analytics, the sitemap, a final check and a full backup. Deliverables include a short admin training session and maintenance documentation.
 
 ---
 
-## Golden Rule for Claude
+## Golden Rule
 
-Always understand the feature in terms of the AURÉLYS business first.
+Before building anything, ask:
 
-Ask:
+> Does this present EVENTHEME as a premium, creative and reliable event partner, and does it make it easier for a visitor to request a quote?
 
-> Does this help present AURÉLYS as a premium, trustworthy, complete event partner and help a visitor move toward requesting a quote?
-
-Then implement within the approved visual system.
-
-For visual decisions, always refer to:
-
-```text
-aurelys-maquette.html
-```
+Then build it within the brand system above.

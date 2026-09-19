@@ -61,12 +61,10 @@ section {
   color: var(--noir);
 }
 
-/* Focus visible — obligatoire pour la navigation clavier */
-a:focus-visible,
-button:focus-visible,
-select:focus-visible,
-input:focus-visible,
-[tabindex]:focus-visible {
+/* Focus visible — obligatoire pour la navigation clavier.
+   `:where()` garde une spécificité minimale : un composant qui dessine son
+   propre état de focus (champ, jour du calendrier) le remplace sans surenchère. */
+:where(a, button, select, input, textarea, [tabindex]):focus-visible {
   outline: 1px solid var(--or);
   outline-offset: 3px;
 }
@@ -78,5 +76,34 @@ input:focus-visible,
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Impression : seul le document marqué `data-print-root` (devis estimatif)
+   est imprimé, sur fond clair, sans les décors ni la navigation. */
+@media print {
+  body:has([data-print-root]) * {
+    visibility: hidden;
+  }
+
+  [data-print-root],
+  [data-print-root] * {
+    visibility: visible;
+  }
+
+  [data-print-root] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    box-shadow: none;
+    clip-path: none !important;
+    transform: none !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  body:has([data-print-root]) {
+    background: #fff;
   }
 }

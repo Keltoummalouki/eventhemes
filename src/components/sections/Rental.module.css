@@ -1,0 +1,289 @@
+/* Location : rail horizontal de fiches + jauge de progression.
+   Sur grand écran le rail est épinglé et avance au défilement (Rental.tsx). */
+
+.root {
+  background: var(--noir);
+}
+
+.stage {
+  padding: clamp(96px, 11vw, 140px) 0;
+}
+
+.head {
+  padding: 0 6vw;
+}
+
+.trackWrap {
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+  cursor: grab;
+}
+
+.trackWrap::-webkit-scrollbar {
+  display: none;
+}
+
+.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+/* Épinglé : c'est la page qui fait avancer le rail. */
+.locked {
+  overflow: hidden;
+  cursor: default;
+}
+
+.track {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  width: max-content;
+  padding: 0 6vw;
+  will-change: transform;
+}
+
+.card {
+  width: clamp(230px, 22vw, 310px);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.thumb {
+  position: relative;
+  display: block;
+  height: clamp(240px, 36vh, 360px);
+  overflow: hidden;
+}
+
+/* Calque de dérive (GSAP) : l'image garde sa transformation de survol. */
+.pan {
+  position: absolute;
+  inset: 0;
+}
+
+.thumb img {
+  filter: grayscale(0.3) sepia(0.15) brightness(0.62) contrast(1.05);
+  transform: scale(1.18);
+  transition:
+    transform 0.9s var(--ease),
+    filter 0.6s ease;
+}
+
+.card:hover .thumb img {
+  transform: scale(1.26);
+  filter: grayscale(0) sepia(0.08) brightness(0.78) contrast(1.05);
+}
+
+.thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--ligne);
+  pointer-events: none;
+  transition: border-color 0.5s ease;
+}
+
+.card:hover .thumb::after {
+  border-color: var(--or);
+}
+
+.index {
+  position: absolute;
+  left: 18px;
+  bottom: 14px;
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 2.6rem;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--or-clair);
+}
+
+.tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 5px 10px;
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: rgba(5, 5, 5, 0.7);
+  backdrop-filter: blur(8px);
+  color: var(--blanc);
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 18px;
+  font-size: 0.62rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+
+.price {
+  color: var(--or-clair);
+  letter-spacing: 0.08em;
+  text-transform: none;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.root .name {
+  margin-top: 8px;
+  font-family: var(--ff-display);
+  font-size: 1.55rem;
+  line-height: 1.15;
+  color: var(--blanc);
+}
+
+.name a:hover {
+  color: var(--or-clair);
+}
+
+.add {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  min-height: 44px;
+  margin-top: auto;
+  padding: 12px 0 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--or-clair);
+  border-bottom: 1px solid transparent;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.add span[aria-hidden] {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--or);
+  border-radius: 50%;
+  font-size: 0.9rem;
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Survol réservé aux pointeurs qui survolent : au doigt, l'état resterait collé. */
+@media (hover: hover) {
+  .add:not(:disabled):hover {
+    border-color: var(--or);
+  }
+
+  .add:not(:disabled):hover span[aria-hidden] {
+    background: var(--or);
+    color: var(--noir);
+  }
+}
+
+/* Dernière carte : invitation au catalogue complet. */
+.more {
+  width: clamp(230px, 22vw, 310px);
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px;
+  border: 1px solid var(--ligne);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(201, 163, 78, 0.16), transparent 60%),
+    var(--noir-2);
+  transition: border-color 0.5s ease;
+}
+
+.more:hover {
+  border-color: var(--or);
+}
+
+.moreLabel {
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--or);
+}
+
+.moreTitle {
+  font-family: var(--ff-display);
+  font-size: 2.6rem;
+  line-height: 1.02;
+  color: var(--blanc);
+}
+
+.moreTitle em {
+  font-style: italic;
+  color: var(--or-clair);
+}
+
+.moreArrow {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--or);
+  border-radius: 50%;
+  color: var(--or-clair);
+  font-size: 1.3rem;
+  transition:
+    transform 0.6s var(--ease),
+    background 0.4s ease,
+    color 0.4s ease;
+}
+
+.more:hover .moreArrow {
+  transform: rotate(45deg);
+  background: var(--or);
+  color: var(--noir);
+}
+
+.scrollbar {
+  margin: 40px 6vw 0;
+  height: 1px;
+  background: var(--ligne);
+  position: relative;
+}
+
+/* Jauge pilotée en `scaleX` : aucun recalcul de mise en page. */
+.fill {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--or);
+  transform: scaleX(0.12);
+  transform-origin: left center;
+}
+
+@media (min-width: 960px) {
+  /* Épinglé, le bloc occupe exactement une hauteur d'écran. */
+  .stage {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: clamp(20px, 3vh, 44px);
+    padding: clamp(90px, 11vh, 120px) 0 clamp(40px, 6vh, 80px);
+  }
+
+  .head > div {
+    margin-bottom: 0;
+  }
+
+  .scrollbar {
+    margin-top: 0;
+  }
+}

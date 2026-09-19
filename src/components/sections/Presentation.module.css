@@ -1,0 +1,110 @@
+/* Présentation rapide : manifeste, engagements. */
+
+.root {
+  padding: clamp(96px, 12vw, 160px) 6vw clamp(80px, 10vw, 130px);
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* --- Manifeste ---------------------------------------------------------- */
+
+.root .manifesto {
+  margin: 0 auto clamp(80px, 10vw, 130px);
+  max-width: 24ch;
+  text-align: center;
+  font-family: var(--ff-display);
+  font-size: clamp(2rem, 4.4vw, 4rem);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--blanc);
+}
+
+.word {
+  will-change: opacity;
+}
+
+/* --- Engagements ------------------------------------------------------- */
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 1px solid var(--ligne);
+}
+
+.pillar {
+  position: relative;
+  padding: 36px 28px 10px 0;
+}
+
+.pillar + .pillar {
+  padding-left: 28px;
+  border-left: 1px solid var(--ligne);
+}
+
+/* Filet doré qui se déploie au survol, au-dessus de la bordure. */
+.pillar::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--or);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.7s var(--ease);
+}
+
+.pillar:hover::before {
+  transform: scaleX(1);
+}
+
+.num {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--or);
+}
+
+.root .pillar h3 {
+  margin: 14px 0 12px;
+  font-size: clamp(1.5rem, 2vw, 1.9rem);
+  color: var(--blanc);
+}
+
+.root .pillar p {
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: rgba(245, 241, 232, 0.6);
+}
+
+@media (max-width: 960px) {
+  .pillars {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pillar:nth-child(3) {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .pillar:nth-child(n + 3) {
+    border-top: 1px solid var(--ligne);
+  }
+}
+
+@media (max-width: 560px) {
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .pillar,
+  .pillar + .pillar {
+    padding-left: 0;
+    border-left: none;
+  }
+
+  .pillar + .pillar {
+    border-top: 1px solid var(--ligne);
+  }
+}
