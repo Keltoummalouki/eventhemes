@@ -3,6 +3,7 @@ import {
   getEntries,
   getInquiries,
   localMode,
+  serverNow,
   verifyAdmin,
 } from "@/lib/eventheme/server";
 export const metadata = {
@@ -16,6 +17,7 @@ export default async function Page() {
       initialEntries={await getEntries(true)}
       initialInquiries={await getInquiries()}
       local={localMode()}
+      now={await serverNow()}
     />
   );
 }

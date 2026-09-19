@@ -1,0 +1,226 @@
+/* ==========================================================================
+   Graphiques — barres classées, colonnes mensuelles et jauges
+
+   Une seule teinte : la donnée est portée par la longueur de la marque, jamais
+   par une couleur inventée. L'or (#c9a34e) atteint 8:1 sur le fond des
+   panneaux (#111), les filets et les pistes restent volontairement discrets.
+   Le libellé et la valeur sont toujours écrits à côté de la marque : rien ne
+   dépend de la couleur seule.
+   ========================================================================== */
+
+.chart {
+  --piste: rgba(245, 241, 232, 0.08);
+  --filet: rgba(245, 241, 232, 0.1);
+  --marque: var(--or);
+  --marque-douce: rgba(245, 241, 232, 0.26);
+  min-width: 0;
+}
+
+/* --- Barres classées ------------------------------------------------------ */
+
+.barList {
+  list-style: none;
+  display: grid;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+.barRow {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.barHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.barLabel {
+  font-size: 11px;
+  color: #f5f1e8;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.barCaption {
+  display: block;
+  font-size: 9px;
+  color: #8f8c85;
+  margin-top: 3px;
+}
+
+.barValue {
+  font-size: 11px;
+  color: #f5f1e8;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.barShare {
+  color: #8f8c85;
+  margin-left: 7px;
+}
+
+.barTrack {
+  height: 6px;
+  background: var(--piste);
+}
+
+.barFill {
+  height: 100%;
+  background: var(--marque);
+  border-radius: 0 4px 4px 0;
+}
+
+.barFill[data-muted] {
+  background: var(--marque-douce);
+}
+
+/* --- Colonnes mensuelles -------------------------------------------------- */
+
+.columns {
+  display: grid;
+  gap: 12px;
+}
+
+.columnsHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 18px;
+}
+
+.readout {
+  font-size: 10px;
+  color: #8f8c85;
+}
+
+.readout b {
+  font-weight: 400;
+  color: #f5f1e8;
+}
+
+.scale {
+  font-size: 9px;
+  color: #777269;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.plot {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 140px;
+  border-bottom: 1px solid var(--filet);
+}
+
+.column {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: default;
+}
+
+.columnFill {
+  width: 100%;
+  max-width: 24px;
+  background: var(--marque);
+  border-radius: 4px 4px 0 0;
+  transition: background 0.25s var(--ease);
+}
+
+.columnFill[data-empty] {
+  background: var(--marque-douce);
+  border-radius: 0;
+}
+
+.column:hover .columnFill,
+.column[data-active] .columnFill {
+  background: var(--or-clair);
+}
+
+.axis {
+  display: flex;
+  gap: 4px;
+}
+
+.axis span {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 8px;
+  letter-spacing: 0.04em;
+  color: #777269;
+  white-space: nowrap;
+}
+
+/* --- Jauge ---------------------------------------------------------------- */
+
+.meter {
+  display: grid;
+  gap: 9px;
+  align-content: start;
+}
+
+.meterHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.meterLabel {
+  font-size: 10px;
+  color: #a5a5a5;
+}
+
+.meterValue {
+  font-family: var(--ff-display);
+  font-size: 27px;
+  line-height: 1;
+  color: #e4c779;
+  font-weight: 400;
+}
+
+.meterTrack {
+  height: 6px;
+  background: var(--piste);
+}
+
+.meterFill {
+  height: 100%;
+  background: var(--marque);
+  border-radius: 0 4px 4px 0;
+}
+
+.meterCaption {
+  font-size: 9px;
+  color: #8f8c85;
+  line-height: 1.6;
+}
+
+/* --- Vide ----------------------------------------------------------------- */
+
+.chartEmpty {
+  font-size: 10px;
+  color: #777269;
+  padding: 18px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .columnFill {
+    transition: none;
+  }
+}

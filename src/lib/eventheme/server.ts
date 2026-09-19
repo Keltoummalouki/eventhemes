@@ -221,3 +221,11 @@ export async function rateLimit(key: string, limit = 5) {
     throw new Error("Trop de tentatives. Réessayez dans quinze minutes.");
   attempts.set(key, bucket);
 }
+/**
+ * Instant de référence des statistiques, daté par le serveur : la page rendue
+ * et la page hydratée comptent ainsi les mêmes journées. Asynchrone à dessein,
+ * pour rester hors du rendu des composants.
+ */
+export async function serverNow() {
+  return Date.now();
+}

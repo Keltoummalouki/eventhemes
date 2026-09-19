@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import {
+  useMemo,
   useState,
   type Dispatch,
   type FormEvent,
@@ -24,7 +25,18 @@ import {
   type Variant,
 } from "@/lib/eventheme/types";
 import { adminLogin } from "@/lib/eventheme/auth";
+import {
+  analytics,
+  compactMoney,
+  count,
+  daysCount,
+  percent,
+  statisticsRows,
+  trendNote,
+  UPCOMING_DAYS,
+} from "@/lib/eventheme/analytics";
 import { Logo } from "./Shell";
+import Statistics, { Tile } from "./Statistics";
 import Button from "@/components/ui/Button";
 import { confirmDialog } from "@/components/ui/dialog";
 import { ArrowUpRightIcon, CloseIcon, SocialIcon } from "@/components/ui/icons";
@@ -190,16 +202,22 @@ export default function Admin({
   initialEntries,
   initialInquiries,
   local,
+  now,
 }: {
   initialEntries: Entry[];
   initialInquiries: Inquiry[];
   local: boolean;
+  /**
+   * Instant de référence des statistiques, daté par le serveur : la page rendue
+   * et la page hydratée comptent ainsi les mêmes journées.
+   */
+  now: number;
 }) {
   const router = useRouter();
   const [entries, setEntries] = useState(initialEntries);
   const [inquiries, setInquiries] = useState(initialInquiries);
   const [tab, setTab] = useState<
-    Kind | "dashboard" | "quotes" | "messages" | "clients"
+    Kind | "dashboard" | "statistics" | "quotes" | "messages" | "clients"
   >("dashboard");
   const [edit, setEdit] = useState<Entry | null>(null);
   const [inquiry, setInquiry] = useState<Inquiry | null>(null);
@@ -229,10 +247,15 @@ export default function Admin({
   }
   const quotes = inquiries.filter((i) => i.kind === "quote");
   const messages = inquiries.filter((i) => i.kind === "contact");
+  const stats = useMemo(
+    () => analytics(entries, inquiries, new Date(now)),
+    [entries, inquiries, now],
+  );
   const title = kinds.includes(tab as Kind)
     ? labels[tab as Kind]
     : {
         dashboard: "Vue d’ensemble",
+        statistics: "Statistiques",
         quotes: "Demandes de devis",
         messages: "Messages de contact",
         clients: "Clients & contacts",
@@ -244,6 +267,40 @@ export default function Admin({
     setSearch("");
     setError("");
     setNotice("");
+  }
+  /** Ouvre une demande depuis les statistiques, dans la liste qui la contient. */
+  function openInquiry(target: Inquiry) {
+    navigate(
+      target.kind === "contact"
+        ? "messages"
+        : target.kind === "callback"
+          ? "clients"
+          : "quotes",
+    );
+    setInquiry(structuredClone(target));
+  }
+  /** Écrit un CSV lisible par Excel : séparateur « ; », BOM, cellules neutralisées. */
+  function downloadCsv(rows: string[][], name: string) {
+    const csv =
+      "﻿" +
+      rows
+        .map((row) =>
+          row
+            .map(
+              (value) =>
+                `"${(/^[=+@\-\t\r]/.test(value) ? "'" + value : value).replaceAll('"', '""')}"`,
+            )
+            .join(";"),
+        )
+        .join("\r\n");
+    const url = URL.createObjectURL(
+      new Blob([csv], { type: "text/csv;charset=utf-8" }),
+    );
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = name;
+    a.click();
+    URL.revokeObjectURL(url);
   }
   function exportCsv() {
     const rows = [
@@ -274,26 +331,7 @@ export default function Admin({
         i.message,
       ]),
     ];
-    const csv =
-      "\uFEFF" +
-      rows
-        .map((row) =>
-          row
-            .map(
-              (value) =>
-                `"${(/^[=+@\-\t\r]/.test(value) ? "'" + value : value).replaceAll('"', '""')}"`,
-            )
-            .join(";"),
-        )
-        .join("\r\n");
-    const url = URL.createObjectURL(
-      new Blob([csv], { type: "text/csv;charset=utf-8" }),
-    );
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "eventheme-demandes.csv";
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadCsv(rows, "eventheme-demandes.csv");
   }
   return (
     <div className={s.admin}>
@@ -308,6 +346,12 @@ export default function Admin({
             onClick={() => navigate("dashboard")}
           >
             ◈ Vue d’ensemble
+          </button>
+          <button
+            className={tab === "statistics" ? s.sideActive : ""}
+            onClick={() => navigate("statistics")}
+          >
+            Statistiques
           </button>
           <span>RELATION CLIENT</span>
           <button
@@ -390,25 +434,43 @@ export default function Admin({
         )}
         {tab === "dashboard" && (
           <>
-            <div className={s.metricGrid}>
-              {[
-                ["Demandes de devis", quotes.length],
-                ["Messages reçus", messages.length],
-                [
-                  "À traiter",
-                  inquiries.filter((i) => i.status === "Nouvelle demande")
-                    .length,
-                ],
-                [
-                  "Articles au catalogue",
-                  entries.filter((e) => e.kind === "products").length,
-                ],
-              ].map(([label, number]) => (
-                <div key={label}>
-                  <span>{label}</span>
-                  <strong>{number}</strong>
-                </div>
-              ))}
+            <div className={s.statGrid}>
+              <Tile
+                label="Demandes reçues (30 jours)"
+                value={count(stats.volume.month.value)}
+                note={trendNote(stats.volume.month, "sur les 30 jours précédents")}
+              />
+              <Tile
+                label="À traiter"
+                value={count(stats.handling.pending)}
+                note={
+                  stats.handling.stale.length
+                    ? `${count(stats.handling.stale.length)} à relancer · la plus ancienne remonte à ${daysCount(stats.handling.oldestPendingDays)}`
+                    : "Aucune demande en retard."
+                }
+              />
+              <Tile
+                label={`Événements dans ${UPCOMING_DAYS} jours`}
+                value={count(stats.events.upcoming30)}
+                note={`${count(stats.events.thisMonth)} ce mois-ci`}
+              />
+              <Tile
+                label="Valeur du portefeuille"
+                value={compactMoney(stats.value.pipeline)}
+                note={`Montant indicatif des demandes ouvertes · concrétisation ${percent(stats.conversion.winRate)}`}
+              />
+            </div>
+            <div className={s.statGrid}>
+              <Tile label="Demandes de devis" value={count(quotes.length)} />
+              <Tile label="Messages reçus" value={count(messages.length)} />
+              <Tile
+                label="Rappels en attente"
+                value={count(stats.volume.callbacks)}
+              />
+              <Tile
+                label="Articles au catalogue"
+                value={count(stats.catalogue.products)}
+              />
             </div>
             <div className={s.adminPanel}>
               <h2>Les dernières demandes</h2>
@@ -416,13 +478,22 @@ export default function Admin({
                 inquiries={inquiries.slice(0, 5)}
                 select={setInquiry}
               />
-              <Button
-                variant="link"
-                icon="→"
-                onClick={() => navigate("quotes")}
-              >
-                Toutes les demandes
-              </Button>
+              <div className={s.actions}>
+                <Button
+                  variant="link"
+                  icon="→"
+                  onClick={() => navigate("quotes")}
+                >
+                  Toutes les demandes
+                </Button>
+                <Button
+                  variant="link"
+                  icon="→"
+                  onClick={() => navigate("statistics")}
+                >
+                  Voir les statistiques
+                </Button>
+              </div>
             </div>
             <div className={s.adminPanel}>
               <h2>Votre site, à votre rythme.</h2>
@@ -446,6 +517,32 @@ export default function Admin({
                 </Button>
               </div>
             </div>
+          </>
+        )}
+        {tab === "statistics" && (
+          <>
+            <div className={s.adminToolbar}>
+              <p className={s.caption}>
+                Indicateurs calculés sur les demandes reçues et les contenus
+                publiés. Les montants sont indicatifs : ils proviennent du
+                configurateur et ne valent pas devis.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                icon="↓"
+                className={s.toolbarAction}
+                onClick={() =>
+                  downloadCsv(
+                    statisticsRows(stats),
+                    "eventheme-statistiques.csv",
+                  )
+                }
+              >
+                Exporter les statistiques CSV
+              </Button>
+            </div>
+            <Statistics stats={stats} select={openInquiry} />
           </>
         )}
         {["quotes", "messages", "clients"].includes(tab) && (

@@ -1316,6 +1316,103 @@
   font-size: 12px;
   margin-bottom: 20px;
 }
+/* --------------------------------------------------------------------------
+   Statistiques — vignettes d'indicateurs, cartes de graphiques et listes de
+   mesures. Mêmes surfaces que le reste de l'administration : #111 sur #0c0c0c,
+   filets clairs, or réservé aux chiffres.
+   -------------------------------------------------------------------------- */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 25px;
+}
+.statTile {
+  padding: 22px;
+  border: 1px solid #ffffff18;
+  background: #111;
+  min-width: 0;
+}
+.statTile > span {
+  display: block;
+  font-size: 10px;
+  color: #a5a5a5;
+}
+.statTile strong {
+  display: block;
+  font-family: var(--ff-display);
+  font-weight: 400;
+  font-size: 37px;
+  line-height: 1.1;
+  color: #e4c779;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+.statTile small {
+  display: block;
+  font-size: 9px;
+  color: #8f8c85;
+  line-height: 1.7;
+  margin-top: 9px;
+}
+.chartGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 34px 40px;
+}
+.chartCard {
+  min-width: 0;
+}
+.chartCard h3 {
+  margin: 0 0 6px;
+}
+.chartCard > p {
+  margin: 0 0 20px;
+  font-size: 10px;
+  color: #8f8c85;
+}
+.meterRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px 30px;
+}
+.statList {
+  display: grid;
+  margin: 22px 0 0;
+}
+.statList > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 11px 0;
+  border-top: 1px solid #ffffff13;
+}
+.statList dt {
+  font-size: 11px;
+  color: #a5a5a5;
+}
+.statList dd {
+  margin: 0;
+  font-size: 11px;
+  color: #f5f1e8;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.tagList li {
+  font-size: 10px;
+  color: #a5a5a5;
+  border: 1px solid #ffffff18;
+  padding: 6px 11px;
+}
 /* Longueur et largeur partagent une colonne de la grille, sans marge propre :
    leurs libellés restent alignés sur celui de « Couleur / finition ». */
 .dimensions {
@@ -1589,6 +1686,15 @@
   .metricGrid > div {
     padding: 18px;
   }
+  .statGrid {
+    gap: 12px;
+  }
+  .statTile {
+    padding: 18px;
+  }
+  .chartGrid {
+    gap: 30px;
+  }
   .catalogGrid {
     gap: 20px;
   }
@@ -1740,6 +1846,12 @@
   }
   .metricGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .statGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .chartGrid {
+    grid-template-columns: minmax(0, 1fr);
   }
   .adminPanel {
     padding: 20px;
@@ -2142,6 +2254,19 @@
   }
   .metricGrid strong {
     font-size: 40px;
+  }
+  .statGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  .statTile {
+    padding: 16px;
+  }
+  .statTile strong {
+    font-size: 32px;
+  }
+  .meterRow {
+    grid-template-columns: minmax(0, 1fr);
   }
   .adminPanel {
     padding: 18px;
