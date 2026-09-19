@@ -1,64 +1,271 @@
-/* Bouton signature AURÉLYS : filet doré, capitales espacées, remplissage animé. */
+/* ==========================================================================
+   Bouton EVENTHEME — or plein, filet doré, contour discret ou lien souligné.
+   Au survol, une couche glisse depuis la gauche (transform seul, sans
+   recalcul de mise en page).
+   ========================================================================== */
 
 .btn {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.74rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  padding: 15px 30px;
-  border: 1px solid var(--or);
-  color: var(--blanc);
-  position: relative;
+  justify-content: center;
+  gap: 18px;
+  min-height: 48px;
+  padding: 0 24px;
   overflow: hidden;
+  border: 1px solid transparent;
+  font-family: var(--ff-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-align: center;
+  cursor: pointer;
   transition:
-    color 0.4s ease,
-    border-color 0.4s ease;
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    opacity 0.2s;
 }
 
-/* Le libellé passe au-dessus du remplissage animé. */
-.btn > span {
-  position: relative;
-  z-index: 2;
-}
-
+/* Couche de remplissage animée. */
 .btn::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--or);
+  z-index: -1;
   transform: translateX(-101%);
   transition: transform 0.45s var(--ease);
-  z-index: 1;
 }
 
-.btn:hover {
-  color: var(--noir);
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.btn:hover::before {
-  transform: translateX(0);
+.icon {
+  display: inline-flex;
+  font-size: 1.1rem;
+  line-height: 1;
 }
 
-.ghost {
-  border-color: rgba(244, 239, 227, 0.35);
+.icon svg {
+  width: 1em;
+  height: 1em;
 }
 
-.ghost:hover {
-  border-color: var(--or);
-}
+/* --- Variantes ----------------------------------------------------------- */
 
 .fill {
   background: var(--or);
-  color: var(--noir);
   border-color: var(--or);
+  color: var(--noir);
 }
 
 .fill::before {
-  background: var(--blanc);
+  background: var(--or-clair);
 }
 
-.fill:hover {
+.outline {
+  border-color: rgba(201, 163, 78, 0.7);
+  color: var(--or-clair);
+}
+
+.outline::before {
+  background: var(--or);
+}
+
+.ghost {
+  border-color: rgba(245, 241, 232, 0.22);
+  color: rgba(245, 241, 232, 0.8);
+  font-weight: 500;
+}
+
+.ghost::before {
+  background: var(--champ-actif);
+}
+
+/* Filtre actif : or plein, sans attendre le survol. */
+.ghost[aria-pressed='true'] {
+  border-color: var(--or);
   color: var(--noir);
+}
+
+.ghost[aria-pressed='true']::before {
+  background: var(--or);
+  transform: translateX(0);
+}
+
+/* Choix confirmé (« Dans mon devis ») : filet or et voile doré, distinct de
+   l'or plein de l'action `fill` qu'il remplace. */
+.outline[aria-pressed='true'] {
+  border-color: var(--or);
+  background: rgba(201, 163, 78, 0.14);
+  color: var(--or-clair);
+}
+
+.link {
+  min-height: 0;
+  padding: 8px 0;
+  overflow: visible;
+  border: 0;
+  border-bottom: 1px solid rgba(201, 163, 78, 0.45);
+  color: inherit;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+/* Le filet s'épaissit d'or au survol, depuis la gauche. */
+.link::before {
+  inset: auto 0 -1px;
+  z-index: 0;
+  height: 1px;
+  background: var(--or);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.link .icon {
+  color: var(--or);
+}
+
+/* --- Survol (pointeurs capables de survoler uniquement) ----------------- */
+
+@media (hover: hover) {
+  .btn:not(:disabled):hover::before {
+    transform: translateX(0);
+  }
+
+  .outline:not(:disabled):hover {
+    border-color: var(--or);
+    color: var(--noir);
+  }
+
+  .ghost:not(:disabled):hover {
+    border-color: var(--or);
+    color: var(--or-clair);
+  }
+
+  .ghost[aria-pressed='true']:not(:disabled):hover {
+    color: var(--noir);
+  }
+
+  .link:not(:disabled):hover {
+    color: var(--or-clair);
+  }
+
+  .link:not(:disabled):hover::before {
+    transform: scaleX(1);
+  }
+}
+
+/* --- Action destructrice ------------------------------------------------- */
+
+/* Texte et filet rouges ; déclaré après les variantes et leur survol pour les
+   remplacer à spécificité égale. */
+.danger {
+  border-color: var(--rouge);
+  color: var(--rouge);
+}
+
+.danger .icon {
+  color: inherit;
+}
+
+/* Remplissage : un voile rouge, pour que le libellé reste lisible. */
+.danger::before {
+  background: var(--rouge-voile);
+}
+
+/* Lien : le filet qui s'épaissit au survol reste rouge plein. */
+.link.danger::before {
+  background: var(--rouge);
+}
+
+@media (hover: hover) {
+  .danger:not(:disabled):hover {
+    border-color: var(--rouge);
+    color: var(--rouge);
+  }
+}
+
+/* --- Tailles ------------------------------------------------------------- */
+
+.sm {
+  min-height: 38px;
+  padding: 0 16px;
+  gap: 12px;
+  font-size: 0.625rem;
+}
+
+.link.sm {
+  min-height: 0;
+  padding: 4px 0;
+  font-size: 0.6875rem;
+}
+
+/* Au doigt, toute cible atteint 44 px. Le lien garde son filet au ras du
+   libellé : sa zone de contact est agrandie par un calque invisible. */
+@media (pointer: coarse) {
+  .sm:not(.link) {
+    min-height: 44px;
+  }
+
+  .link::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 44px;
+    transform: translateY(-50%);
+  }
+}
+
+/* Même hauteur qu'un champ : se place à côté d'une saisie sans décalage. */
+.square {
+  width: 48px;
+  min-height: 48px;
+  padding: 0;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+.square svg {
+  width: 16px;
+  height: 16px;
+}
+
+.block {
+  display: flex;
+  width: 100%;
+}
+
+/* --- États --------------------------------------------------------------- */
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn[aria-busy='true'] {
+  cursor: progress;
+}
+
+.spinner {
+  display: block;
+  width: 0.75em;
+  height: 0.75em;
+  border: 1px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
 }

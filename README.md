@@ -1,5 +1,13 @@
 # EVENTHEME
 
+## Working preview and production setup
+
+The Eventheme client website and admin are now available at `/` and `/admin`. Run `npm run dev -- --hostname 127.0.0.1` for the local preview. Content changes and test enquiries persist in `.eventheme/data.json`; uploaded photos are stored in `public/uploads/`.
+
+See [the setup and admin guide](docs/SETUP.md) for the Supabase migration, content export, administrator setup, and launch requirements. Supabase is used only when `EVENTHEME_DATA_MODE=supabase` is explicitly configured. Automated e-mails are not connected yet; demonstration photography, catalogue entries, contact information and legal copy must be finalized before launch.
+
+The original brief and roadmap below are retained as project context; their earlier “Current Status” section describes the starting prototype.
+
 **EVENTHEME** is a Moroccan event company specialised in event organisation, entertainment (_animation_), decoration and staging (_mise en scène_), and event-equipment rental.
 
 This repository contains its official website: a digital showcase, a commercial catalogue, and a lead-generation tool that lets visitors configure their event and request a personalised quote.
@@ -73,7 +81,6 @@ The « Mon devis » button is always visible, on mobile too.
 
 | Page | Content |
 | --- | --- |
-| Coming Soon | Pre-launch page: centred logo, signature, « Quelque chose d’extraordinaire arrive. », Instagram and WhatsApp links, discreet golden butterflies, no countdown |
 | Accueil | Hero, quick introduction, the three main services, event types, featured projects, final CTA « Parlons de votre prochain événement. » |
 | Événements | Private, professional, institutional, children's, cultural and promotional events, each with its services, examples and a quote button |
 | Services | Organisation, Animation, Décoration & mise en scène, Location de matériel. Every service has an « Ajouter à mon devis » button |
@@ -135,7 +142,7 @@ Staff manage the site without touching code: page content, images, videos, servi
 
 ## Quality Requirements
 
-- **Responsive:** desktop, tablet, Android and iPhone, with no horizontal scrolling. Heroes and the Coming Soon page stay precisely centred on the vertical axis.
+- **Responsive:** desktop, tablet, Android and iPhone, with no horizontal scrolling.
 - **Motion:** elegant and light (progressive reveals, image transitions, moderate parallax, golden lines and butterflies, sticky header), always respecting `prefers-reduced-motion`.
 - **SEO:** per-page titles and meta descriptions, clean URLs, XML sitemap, structured data, alt text, internal linking, Search Console and analytics. Target keywords include _organisation événementielle au Maroc_, _organisation événements Casablanca_ and _location matériel événementiel Casablanca_.
 - **Performance:** WebP images, lazy loading, deferred scripts, caching, light videos, good Core Web Vitals.
@@ -167,7 +174,7 @@ Staff manage the site without touching code: page content, images, videos, servi
 
 The repository currently holds a single-page front-end prototype built from an earlier approved mockup for a brand called AURÉLYS (`aurelys-maquette .html`). It is the visual and technical starting point for EVENTHEME.
 
-**Already built:** intro curtain, sticky header with accessible mobile menu, hero slideshow, animated statistics, services, marquee, equipment rail, process timeline, filterable gallery, testimonial slider, budget simulator, CTA and footer, all data-driven and motion-safe.
+**Already built:** intro curtain, sticky header with accessible mobile menu, hero slideshow, animated statistics, services, equipment rail, process timeline, filterable gallery, testimonial slider, budget simulator, CTA and footer, all data-driven and motion-safe.
 
 **Still to do:**
 
@@ -210,10 +217,9 @@ eventhemes/
     │   ├── sections/          Hero, Stats, Services, Equipment, ProcessTimeline,
     │   │                      Gallery, Testimonials, EventCalculator, CTA
     │   └── ui/                Button, Eyebrow, SectionHeader, Divider, Reveal,
-    │                          RevealText, Marquee, SmartImage, icons
+    │                          RevealText, SmartImage, icons
     ├── data/                  Repeated content (services, equipment, gallery,
-    │                          testimonials, navigation, calculator options,
-    │                          marquee terms)
+    │                          testimonials, navigation, calculator options)
     ├── hooks/                 useCarousel, useScrolled
     ├── lib/                   Motion core (GSAP), pricing logic, image URL
     │                          builders, intro relay, class helper
@@ -228,7 +234,7 @@ All animation goes through `src/lib/motion.ts`. It registers the GSAP plugins on
 
 | Helper | Use for | Behaviour when motion is reduced |
 | --- | --- | --- |
-| `motionSafe` | Ornament (parallax, marquee, magnetic buttons, pinning) | The effect is never created |
+| `motionSafe` | Ornament (parallax, magnetic buttons, pinning) | The effect is never created |
 | `revealSafe` | Content that appears on scroll | Content is shown immediately, unanimated |
 
 Two rules keep this maintainable:

@@ -20,3 +20,8 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
+
+# Private local preview data (may contain client information)
+.eventheme/
+test-results/
+public/uploads/

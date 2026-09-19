@@ -1,0 +1,160 @@
+/* Types d'événements : liste typographique, aperçu photographique flottant. */
+
+.root {
+  position: relative;
+  padding: clamp(96px, 11vw, 150px) 6vw;
+  background:
+    radial-gradient(ellipse at 85% 0%, rgba(201, 163, 78, 0.07), transparent 55%),
+    var(--noir-2);
+  border-top: 1px solid var(--ligne);
+  border-bottom: 1px solid var(--ligne);
+  overflow: hidden;
+}
+
+.list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(32px, 6vw, 96px);
+  max-width: 1440px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+}
+
+/* Rangée animée à l'entrée (EventTypes.tsx) ; le bouton garde son survol. */
+.item {
+  position: relative;
+}
+
+.row {
+  position: relative;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 44px 1fr auto 28px;
+  align-items: baseline;
+  gap: 16px;
+  padding: 22px 0;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.12);
+  text-align: left;
+  color: var(--blanc);
+}
+
+/* Filet doré qui balaie la rangée au survol. */
+.row::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--or);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.6s var(--ease);
+}
+
+.index {
+  font-family: var(--ff-display);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--or);
+}
+
+.name {
+  font-family: var(--ff-display);
+  font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  transition:
+    transform 0.6s var(--ease),
+    color 0.4s ease;
+}
+
+.category {
+  font-size: 0.62rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gris);
+}
+
+.arrow {
+  justify-self: end;
+  color: var(--or);
+  font-size: 1.1rem;
+  transition: transform 0.5s var(--ease);
+}
+
+.row:hover::after,
+.row:focus-visible::after,
+.picked::after {
+  transform: scaleX(1);
+}
+
+.row:hover .name,
+.row:focus-visible .name {
+  transform: translateX(14px);
+  color: var(--or-clair);
+}
+
+.row:hover .arrow,
+.row:focus-visible .arrow {
+  transform: translate(4px, -4px);
+}
+
+/* Occasion déjà retenue pour le devis. */
+.picked .name {
+  font-style: italic;
+  color: var(--or-clair);
+}
+
+/* Aperçu flottant, centré sur le curseur ; piloté par GSAP (x, y, échelle). */
+.preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 260px;
+  aspect-ratio: 4 / 5;
+  margin: -170px 0 0 -130px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.7);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
+}
+
+.preview img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(1.12);
+  filter: saturate(0.9) brightness(0.85);
+  transition:
+    opacity 0.45s ease,
+    transform 0.9s var(--ease);
+}
+
+.preview img.shown {
+  opacity: 1;
+  transform: scale(1);
+}
+
+@media (max-width: 860px) {
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .row {
+    grid-template-columns: 36px 1fr 24px;
+  }
+
+  .category {
+    display: none;
+  }
+
+  .preview {
+    display: none;
+  }
+}

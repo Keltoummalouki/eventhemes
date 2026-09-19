@@ -1,39 +1,61 @@
-/* En-tête de section : sur-titre, titre en italique, chapô. */
+/* En-tête de section : sur-titre, titre, chapô, action éventuelle.
+   Sélecteurs à deux classes : ils l'emportent sur les règles `.site h2` de
+   Eventheme.module.css, quel que soit l'ordre de chargement des feuilles. */
 
 .head {
-  max-width: 640px;
-  margin-bottom: 64px;
+  margin-bottom: clamp(44px, 6vw, 72px);
 }
 
-.head h2 {
-  font-size: clamp(2rem, 3.6vw, 3rem);
-  font-style: italic;
+.text {
+  max-width: 720px;
+}
+
+.head .title {
+  margin-top: 22px;
+  font-size: clamp(2.4rem, 4.6vw, 4.3rem);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
   color: var(--blanc);
-  margin-top: 18px;
-  line-height: 1.15;
+  white-space: normal;
+}
+
+.head .title em {
+  font-style: italic;
+  color: var(--or-clair);
 }
 
 /* Le filet doré du sur-titre se dessine à l'entrée : GSAP anime cette variable
    de 0 à 1 (voir SectionHeader.tsx). Sa valeur de repos garantit un filet
    complet si l'animation ne joue pas. */
 .eyebrow {
-  --aurelys-rule: 1;
+  --eyebrow-rule: 1;
 }
 
-.lede {
-  margin-top: 20px;
-  color: var(--blanc-doux);
-  font-size: 1rem;
-  line-height: 1.8;
+.head .lede {
+  margin-top: 22px;
+  color: rgba(245, 241, 232, 0.66);
+  font-size: 0.95rem;
+  line-height: 1.85;
   max-width: 52ch;
 }
 
+.withAction {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.action {
+  flex: none;
+}
+
 .centered {
-  margin-left: auto;
-  margin-right: auto;
   text-align: center;
 }
 
+.centered .text,
 .centered .lede {
   margin-left: auto;
   margin-right: auto;

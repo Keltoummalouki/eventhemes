@@ -6,27 +6,42 @@
 
 :root {
   /* Fonds */
-  --noir: #0a0908;
-  --noir-2: #0f0e0b;
+  --noir: #050505;
+  --noir-2: #111111;
   --anthracite: #1c1b17;
   --anthracite-2: #26241e;
 
   /* Ors */
-  --or: #c9a668;
-  --or-clair: #e8d5a3;
+  --or: #c9a34e;
+  --or-clair: #e4c779;
   --or-vif: #d9b978;
   --or-profond: #8a6a2a;
 
   /* Textes */
-  --blanc: #f4efe3;
+  --blanc: #f5f1e8;
   --blanc-doux: #cfc7b4;
+
+  /* Gris secondaire (charte) : aides, textes indicatifs */
+  --gris: #a5a5a5;
 
   /* Filets */
   --ligne: rgba(201, 166, 104, 0.22);
 
+  /* Actions destructrices (« Supprimer ») uniquement — hors charte, à la demande
+     de l'équipe. Contraste 6:1 sur --noir-2. */
+  --rouge: #ef6b6b;
+  --rouge-voile: rgba(239, 107, 107, 0.12);
+
+  /* Champs de formulaire et panneaux flottants (listes, menus, calendrier) */
+  --champ-fond: var(--noir-2);
+  --champ-filet: rgba(245, 241, 232, 0.16);
+  --champ-filet-survol: rgba(201, 163, 78, 0.55);
+  --champ-actif: rgba(201, 163, 78, 0.1);
+  --panneau-ombre: 0 24px 60px rgba(0, 0, 0, 0.6);
+
   /* Typographie — les variables --font-* sont injectées par next/font (layout.tsx) */
   --ff-display: var(--font-display), 'Cormorant Garamond', serif;
-  --ff-body: var(--font-body), 'Jost', sans-serif;
+  --ff-body: var(--font-body), 'Manrope', sans-serif;
 
   /* Courbe d'accélération commune à toutes les transitions */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);

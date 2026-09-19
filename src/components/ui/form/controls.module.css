@@ -1,0 +1,779 @@
+/* ==========================================================================
+   Champs EVENTHEME — styles partagés par tous les contrôles de formulaire
+   (Input, Textarea, SearchInput, NumberInput, PhoneInput, FileInput,
+   Checkbox, Select, DatePicker, TimePicker) et par les panneaux flottants
+   (liste d'options, menu, calendrier).
+
+   Fond noir secondaire, filet clair très fin, or réservé au focus, à la
+   sélection et aux accents : le champ reste calme, l'or guide le regard.
+   ========================================================================== */
+
+/* --- Champ : libellé + contrôle + aide + erreur ------------------------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: rgba(245, 241, 232, 0.78);
+}
+
+.required {
+  margin-left: 4px;
+  color: var(--or);
+}
+
+.hint {
+  font-size: 0.625rem;
+  line-height: 1.7;
+  color: var(--gris);
+}
+
+/* La charte n'a pas de rouge : l'erreur passe par l'or clair et un losange,
+   et le message écrit porte seul l'information (jamais la couleur seule). */
+.error {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  color: var(--or-clair);
+}
+
+.error::before {
+  content: '';
+  flex-shrink: 0;
+  width: 5px;
+  height: 5px;
+  background: currentColor;
+  transform: translateY(-1px) rotate(45deg);
+}
+
+/* --- Boîte du contrôle --------------------------------------------------- */
+
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  background: var(--champ-fond);
+  border: 1px solid var(--champ-filet);
+  color: var(--blanc);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-align: left;
+  transition:
+    border-color 0.25s var(--ease),
+    box-shadow 0.25s var(--ease);
+}
+
+@media (hover: hover) {
+  .control:hover {
+    border-color: var(--champ-filet-survol);
+  }
+}
+
+/* Focus : filet doré doublé, lisible sur fond noir (contraste > 3:1). */
+.control:focus-within,
+.control[aria-expanded='true'] {
+  border-color: var(--or);
+  box-shadow: inset 0 0 0 1px var(--or);
+}
+
+.control[data-expanded] {
+  border-color: var(--or);
+  box-shadow: inset 0 0 0 1px var(--or);
+}
+.selectInput[readonly] { cursor: pointer; }
+.selectInput { text-overflow: ellipsis; }
+.control[data-expanded] > .chevron { transform: rotate(180deg); }
+
+.control:focus-visible,
+.control :focus-visible {
+  outline: none;
+}
+
+.control[data-invalid] {
+  border-color: var(--or-clair);
+}
+
+.control[data-disabled],
+.control:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.multiline {
+  align-items: stretch;
+}
+
+/* --- Saisie native ------------------------------------------------------- */
+
+.input {
+  flex: 1;
+  align-self: stretch;
+  min-width: 0;
+  padding: 13px 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  color: inherit;
+  font: inherit;
+  outline: none;
+  color-scheme: dark;
+}
+
+.input::placeholder {
+  color: var(--gris);
+  opacity: 1;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+}
+
+.textarea {
+  min-height: 128px;
+  line-height: 1.7;
+  resize: vertical;
+}
+
+.input[type='search']::-webkit-search-cancel-button,
+.input[type='search']::-webkit-search-decoration {
+  appearance: none;
+}
+
+/* iOS agrandit la page sur toute saisie en dessous de 16 px. */
+@media (pointer: coarse) {
+  .input {
+    font-size: 16px;
+  }
+}
+
+/* --- Nombre : boutons − / + ---------------------------------------------- */
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Les boutons touchent le bord droit de la boîte. */
+.withStepper {
+  padding-right: 0;
+}
+
+.stepper {
+  display: flex;
+  flex-shrink: 0;
+  align-self: stretch;
+  border-left: 1px solid var(--champ-filet);
+}
+
+.stepButton {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  color: var(--or);
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.stepButton + .stepButton {
+  border-left: 1px solid var(--champ-filet);
+}
+
+.stepButton svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+@media (hover: hover) {
+  .stepButton:hover:not(:disabled) {
+    background: var(--champ-actif);
+    color: var(--or-clair);
+  }
+}
+
+.stepButton:active:not(:disabled) {
+  background: var(--champ-actif);
+}
+
+.stepButton:disabled {
+  color: var(--gris);
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* --- Téléphone : pays et indicatif --------------------------------------- */
+
+/* Drapeaux Twemoji (CC BY 4.0, voir fonts/README.md) pour les systèmes qui
+   n'affichent pas les drapeaux émoji, Windows en tête. La police n'est
+   téléchargée que là où `[data-font]` l'applique (hooks/useFlagFont). */
+@font-face {
+  font-family: 'Drapeaux EVENTHEME';
+  src: url('./fonts/TwemojiCountryFlags.woff2') format('woff2');
+  unicode-range: U+1F1E6-1F1FF;
+  font-display: swap;
+}
+
+.flag {
+  flex-shrink: 0;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.flag[data-font] {
+  font-family: 'Drapeaux EVENTHEME', 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji',
+    sans-serif;
+}
+
+/* Le bouton du pays touche le bord gauche de la boîte. */
+.withCountry {
+  padding-left: 0;
+}
+
+.country {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  align-self: stretch;
+  gap: 8px;
+  padding: 0 12px 0 14px;
+  border-right: 1px solid var(--champ-filet);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.country .chevron {
+  width: 14px;
+  height: 14px;
+}
+
+@media (hover: hover) {
+  .country:hover:not(:disabled) {
+    background: var(--champ-actif);
+  }
+}
+
+/* La boîte porte déjà le filet doré : le fond distingue le bouton de la saisie. */
+.country:focus-visible,
+.country[aria-expanded='true'] {
+  background: var(--champ-actif);
+}
+
+.country:disabled {
+  cursor: not-allowed;
+}
+
+@media (pointer: coarse) {
+  .country {
+    font-size: 16px;
+  }
+}
+
+.countryPanel {
+  width: 100%;
+  min-width: min(20rem, calc(100vw - 24px));
+}
+
+.countrySearch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px;
+  border-bottom: 1px solid var(--champ-filet);
+  font-size: 0.8125rem;
+}
+
+.countrySearch svg {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: var(--or);
+}
+
+.countryPanel .optionMeta {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Filet sous les pays fréquents, avant la liste complète. */
+.option[data-divider] {
+  margin-bottom: 7px;
+}
+
+.option[data-divider]::after {
+  content: '';
+  position: absolute;
+  right: 18px;
+  bottom: -4px;
+  left: 18px;
+  height: 1px;
+  background: var(--champ-filet);
+}
+
+/* --- Couleur : pastille et nuancier -------------------------------------- */
+
+/* La pastille porte la teinte ; le sélecteur natif, invisible, la recouvre
+   et ouvre le nuancier du système. */
+.swatch {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 22px;
+  border: 1px solid rgba(245, 241, 232, 0.32);
+  cursor: pointer;
+  forced-color-adjust: none;
+  transition: border-color 0.2s;
+}
+
+/* Aucune teinte : la diagonale, signe courant de « pas de couleur ». */
+.swatch[data-empty] {
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 0.5px),
+    var(--gris) calc(50% - 0.5px) calc(50% + 0.5px),
+    transparent calc(50% + 0.5px)
+  );
+}
+
+@media (hover: hover) {
+  .swatch:hover {
+    border-color: var(--or);
+  }
+}
+
+.swatch:has(:focus-visible) {
+  outline: 1px solid var(--or);
+  outline-offset: 3px;
+}
+
+/* Déborde de la pastille : une cible tactile de 38 px. */
+.swatchInput {
+  position: absolute;
+  inset: -8px;
+  width: calc(100% + 16px);
+  height: calc(100% + 16px);
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.swatchInput:disabled {
+  cursor: not-allowed;
+}
+
+/* --- Fichiers : bouton « Choisir » et dépôt ------------------------------ */
+
+.file {
+  gap: 16px;
+  padding-left: 7px;
+  cursor: pointer;
+}
+
+.file[data-dragging] {
+  border-color: var(--or);
+  box-shadow: inset 0 0 0 1px var(--or);
+  background: var(--champ-actif);
+}
+
+.file[aria-busy='true'] {
+  cursor: progress;
+}
+
+.fileButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 14px;
+  border: 1px solid rgba(201, 163, 78, 0.6);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--or-clair);
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+.fileButton svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (hover: hover) {
+  .file:not([data-disabled]):hover .fileButton {
+    border-color: var(--or);
+    background: var(--champ-actif);
+  }
+}
+
+/* Le glisser-déposer n'existe pas au doigt : l'invitation disparaît. */
+@media (hover: none) and (pointer: coarse) {
+  .dropHint {
+    display: none;
+  }
+}
+
+/* --- Case à cocher -------------------------------------------------------- */
+
+.checkField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.checkbox {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: rgba(245, 241, 232, 0.86);
+  cursor: pointer;
+}
+
+.checkbox[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* La case native, redessinée : elle garde clavier, formulaire et annonces. */
+.checkInput {
+  appearance: none;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  background: var(--champ-fond) center / 12px no-repeat;
+  border: 1px solid rgba(245, 241, 232, 0.32);
+  border-radius: 0;
+  cursor: inherit;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+.checkInput:checked {
+  background-color: var(--or);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23050505' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3.5 8.5l3 3 6-7'/%3E%3C/svg%3E");
+  border-color: var(--or);
+}
+
+@media (hover: hover) {
+  .checkbox:not([data-disabled]):hover .checkInput:not(:checked) {
+    border-color: var(--champ-filet-survol);
+  }
+}
+
+.checkInput:focus-visible {
+  outline: 1px solid var(--or);
+  outline-offset: 3px;
+}
+
+.checkInput[aria-invalid='true'] {
+  border-color: var(--or-clair);
+}
+
+/* Mode contraste élevé : le dessin personnalisé disparaîtrait, la case native revient. */
+@media (forced-colors: active) {
+  .checkInput {
+    appearance: auto;
+  }
+}
+
+.checkLabel {
+  min-width: 0;
+}
+
+.checkLabel a {
+  color: var(--or-clair);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Aide et erreur alignées sur le texte, pas sur la case. */
+.checkNote {
+  padding-left: 30px;
+}
+
+/* Icône, unité ou action placée dans la boîte. */
+.affix {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--gris);
+}
+
+.affix svg,
+.icon {
+  flex-shrink: 0;
+  width: 17px;
+  height: 17px;
+  color: var(--or);
+}
+
+/* Bouton « effacer » de la recherche : cible tactile de 32 px. */
+.clear {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: -8px;
+  color: var(--gris);
+  transition: color 0.2s;
+}
+
+.clear:hover,
+.clear:focus-visible {
+  color: var(--or-clair);
+}
+
+.clear svg {
+  width: 14px;
+  height: 14px;
+  color: inherit;
+}
+
+/* --- Déclencheur de liste, de menu ou de calendrier ---------------------- */
+
+.anchor {
+  position: relative;
+}
+
+/* Déclencheur en forme de bouton : le panneau se cale sur lui, pas sur la ligne. */
+.inline {
+  align-self: flex-start;
+}
+
+.trigger {
+  cursor: pointer;
+  user-select: none;
+}
+
+.value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.placeholder {
+  color: var(--gris);
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--or);
+  transition: transform 0.35s var(--ease);
+}
+
+[aria-expanded='true'] > .chevron {
+  transform: rotate(180deg);
+}
+
+/* --- Panneau flottant ---------------------------------------------------- */
+
+.panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 40;
+  /* Filet doré en tête : un calque de fond, pour qu'il ne défile pas avec la liste. */
+  background:
+    linear-gradient(90deg, transparent, rgba(201, 163, 78, 0.85), transparent) top / 100% 1px
+      no-repeat,
+    var(--noir-2);
+  border: 1px solid rgba(201, 163, 78, 0.28);
+  box-shadow: var(--panneau-ombre);
+  animation: panel-in 0.22s var(--ease) both;
+}
+
+.panel[data-side='top'] {
+  top: auto;
+  bottom: calc(100% + 6px);
+  animation-name: panel-in-top;
+}
+
+.panel[data-align='end'] {
+  left: auto;
+  right: 0;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes panel-in-top {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- Liste d'options / d'actions ----------------------------------------- */
+
+.list {
+  width: 100%;
+  min-width: 100%;
+  max-height: min(304px, 50vh);
+  padding: 6px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 163, 78, 0.4) transparent;
+}
+
+.menu {
+  min-width: max(100%, 15rem);
+  width: max-content;
+  max-width: calc(100vw - 24px);
+}
+
+.option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 11px 18px;
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  text-align: left;
+  color: rgba(245, 241, 232, 0.86);
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+/* Filet doré à gauche de l'option active. */
+.option::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  width: 1px;
+  background: var(--or);
+  transform: scaleY(0);
+  transition: transform 0.25s var(--ease);
+}
+
+.option[data-active],
+.option:focus-visible {
+  outline: none;
+  background: var(--champ-actif);
+  color: var(--blanc);
+}
+
+@media (hover: hover) {
+  .option:hover {
+    background: var(--champ-actif);
+    color: var(--blanc);
+  }
+}
+
+.option[data-active]::before,
+.option:focus-visible::before {
+  transform: scaleY(1);
+}
+
+.option[aria-selected='true'] {
+  color: var(--or-clair);
+}
+
+.option[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.optionBody {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* Pictogramme d'une option, repris dans le champ une fois choisie. */
+.optionIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--or);
+}
+
+.optionIcon svg {
+  width: 17px;
+  height: 17px;
+}
+
+.optionDescription {
+  font-size: 0.6875rem;
+  line-height: 1.6;
+  color: var(--gris);
+}
+
+.optionMeta {
+  flex-shrink: 0;
+  font-size: 0.6875rem;
+  color: var(--or);
+  white-space: nowrap;
+}
+
+.check {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  color: var(--or);
+}
+
+.empty {
+  display: block;
+  padding: 14px 18px;
+  font-size: 0.75rem;
+  color: var(--gris);
+}

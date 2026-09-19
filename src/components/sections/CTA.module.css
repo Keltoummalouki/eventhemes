@@ -1,65 +1,85 @@
-/* Appel à l'action final : grande photo, voile radial, message centré. */
+/* Appel à l'action final : grande photo en parallaxe, voile radial, message centré. */
 
 .cta {
   position: relative;
-  height: 70vh;
-  min-height: 480px;
+  min-height: 86svh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  padding: 120px 0;
 }
 
-/* Correction d'un défaut de la maquette : l'image y était un enfant flex en
-   flux, ce qui la réduisait à sa largeur intrinsèque et repoussait le texte
-   hors du cadre. Elle est ici replacée en fond plein cadre — la mise en page
-   voulue (photo + voile radial + contenu centré) est ainsi respectée.
-
-   Le calque déborde en haut et en bas : c'est cette marge que consomme la
-   parallaxe, sans jamais découvrir de bande vide. */
+/* Le calque déborde en haut et en bas : cette marge est consommée par la
+   parallaxe sans jamais découvrir de bande vide. */
 .backdrop {
   position: absolute;
   inset: -10% 0;
 }
 
-.cta img {
+.backdrop img {
   position: absolute;
   inset: 0;
-  filter: brightness(0.4) saturate(1.1);
+  filter: brightness(0.38) saturate(1.05);
 }
 
 .cta::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(10, 9, 8, 0.25), rgba(10, 9, 8, 0.9));
+  background: radial-gradient(ellipse at center, rgba(5, 5, 5, 0.2), rgba(5, 5, 5, 0.92) 78%);
 }
 
 .content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   text-align: center;
   padding: 0 6vw;
 }
 
-.content h2 {
-  font-size: clamp(2rem, 4.4vw, 3.6rem);
-  font-style: italic;
+.content .title {
+  margin: 24px auto 0;
+  max-width: 14ch;
+  font-size: clamp(2.8rem, 6.4vw, 6rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
   color: var(--blanc);
-  max-width: 18ch;
-  margin: 22px auto 0;
+  white-space: normal;
 }
 
-.content p {
-  margin-top: 20px;
-  color: var(--blanc-doux);
-  max-width: 48ch;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.8;
+.content .title em {
+  font-style: italic;
+  color: var(--or-clair);
 }
 
-/* Sélecteur descendant volontaire : prioritaire sur le module Button. */
-.content .ctaBtn {
-  margin-top: 36px;
+.content .lede {
+  margin: 26px auto 0;
+  max-width: 46ch;
+  font-size: 0.98rem;
+  line-height: 1.85;
+  color: rgba(245, 241, 232, 0.76);
+}
+
+.actions {
+  margin-top: 38px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.social {
+  display: inline-block;
+  margin-top: 34px;
+  font-size: 0.66rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--or-clair);
+  border-bottom: 1px solid rgba(201, 163, 78, 0.4);
+  padding-bottom: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.social:hover {
+  border-color: var(--or);
 }

@@ -1,23 +1,19 @@
 'use client';
 
 import { useRef } from 'react';
+import Button from '@/components/ui/Button';
 import Reveal from '@/components/ui/Reveal';
 import SectionHeader from '@/components/ui/SectionHeader';
-import { PROCESS_STEPS } from '@/data/process';
+import { methodSteps } from '@/data/eventheme';
 import { gsap, revealSafe, useGSAP } from '@/lib/motion';
 import styles from './ProcessTimeline.module.css';
 
 /**
- * « Comment ça marche ? » — les cinq temps de l'accompagnement.
+ * « Notre méthode » — les sept temps de la collaboration.
  *
- * Un filet doré se trace verticalement au fil du défilement, entre les numéros
- * et les intitulés : le visiteur voit littéralement le parcours se dérouler.
- * La progression est liée à la position de la barre de défilement (`scrub`),
- * pas à une durée — c'est lui qui mène la lecture, pas l'animation.
- *
- * Les étapes sont des blocs frères directs de `.list` (et non une liste `<ol>`)
- * afin de conserver le filet de séparation `:last-child` de la maquette ; leur
- * ordre est déjà porté visuellement et textuellement par les numéros 01 → 05.
+ * Un filet doré se trace entre les numéros et les intitulés au fil du
+ * défilement (`scrub`) : c'est le visiteur qui mène la lecture, pas une durée.
+ * Sur grand écran, l'en-tête reste à l'écran pendant que les étapes défilent.
  */
 export default function ProcessTimeline() {
   const ref = useRef<HTMLElement>(null);
@@ -25,32 +21,21 @@ export default function ProcessTimeline() {
   useGSAP(
     () =>
       revealSafe(ref, (full) => {
-        const section = ref.current;
-        if (!section) return;
-        const find = gsap.utils.selector(section);
+        const find = gsap.utils.selector(ref);
         const spine = find(`.${styles.spineFill}`);
         const list = find(`.${styles.list}`)[0];
         if (!list) return;
-
         if (!full) {
           gsap.set(spine, { scaleY: 1 });
           return;
         }
-
         gsap.fromTo(
           spine,
           { scaleY: 0 },
           {
             scaleY: 1,
             ease: 'none',
-            scrollTrigger: {
-              trigger: list,
-              // Le tracé commence quand la première étape arrive à hauteur de
-              // lecture et s'achève quand la dernière l'a dépassée.
-              start: 'top 72%',
-              end: 'bottom 78%',
-              scrub: 0.6,
-            },
+            scrollTrigger: { trigger: list, start: 'top 70%', end: 'bottom 70%', scrub: 0.6 },
           },
         );
       }),
@@ -59,29 +44,46 @@ export default function ProcessTimeline() {
 
   return (
     <section className={styles.timeline} id="methode" ref={ref}>
-      <div className="container">
-        <SectionHeader
-          eyebrow="Notre process"
-          title="Comment ça marche ?"
-          description="Un accompagnement structuré, de la première rencontre à la réalisation de votre événement."
-        />
-
-        <div className={styles.list}>
-          <div className={styles.spine} aria-hidden="true">
-            <div className={styles.spineFill} />
-          </div>
-
-          {PROCESS_STEPS.map((step, index) => (
-            <Reveal key={step.title} className={styles.item}>
-              <div className={styles.num}>{String(index + 1).padStart(2, '0')}</div>
-              <div className={styles.body}>
-                <h3>{step.title}</h3>
-                <p>{step.description}</p>
-              </div>
-              <div className={styles.bar} />
-            </Reveal>
-          ))}
+      <div className={styles.layout}>
+        <div className={styles.aside}>
+          <SectionHeader
+            eyebrow="Notre méthode"
+            title={
+              <>
+                Ensemble,
+                <br />
+                <em>à chaque étape.</em>
+              </>
+            }
+            description="Un accompagnement structuré, du premier échange au suivi après l’événement."
+          />
+          <Button href="#devis" variant="outline" icon="↗">
+            Commencer l’échange
+          </Button>
         </div>
+
+        <ol className={styles.list}>
+          <li className={styles.spine} aria-hidden="true">
+            <div className={styles.spineFill} />
+          </li>
+          {methodSteps.map(([title, description], index) => (
+            <li key={title}>
+              <Reveal className={styles.item}>
+                <div className={styles.num} aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </div>
+                <div className={styles.body}>
+                  <h3>
+                    <span className="visually-hidden">Étape {index + 1} : </span>
+                    {title}
+                  </h3>
+                  <p>{description}</p>
+                </div>
+                <div className={styles.bar} />
+              </Reveal>
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   );

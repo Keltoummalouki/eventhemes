@@ -1,0 +1,68 @@
+/* Papillons dorés : calque décoratif, jamais interactif. */
+
+.frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Invisible tant que GSAP ne les a pas fait entrer (voir Butterflies.tsx). */
+.flyer {
+  position: absolute;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  will-change: transform;
+}
+
+.flyer svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px rgba(228, 199, 121, 0.35));
+}
+
+.wing {
+  fill-opacity: 0.55;
+  stroke: var(--or-clair);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  /* Le pli se fait sur l'axe du corps, au centre de la vue. */
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: beat var(--beat, 1s) ease-in-out infinite;
+}
+
+.body {
+  fill: var(--or-clair);
+}
+
+.antenna {
+  fill: none;
+  stroke: var(--or-clair);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+}
+
+/* Un battement, puis un temps de vol plané. */
+@keyframes beat {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  30% {
+    transform: scaleX(0.16);
+  }
+  60% {
+    transform: scaleX(1);
+  }
+}

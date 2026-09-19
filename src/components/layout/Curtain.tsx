@@ -1,23 +1,20 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { SITE } from '@/data/site';
-import { openCurtain } from '@/lib/intro';
+import { curtainOpened, openCurtain } from '@/lib/intro';
 import { gsap, revealSafe, useGSAP } from '@/lib/motion';
 import styles from './Curtain.module.css';
 
-/** Délai après chargement complet avant l'ouverture, comme dans la maquette. */
-const OPEN_DELAY_MS = 250;
-/** Filet de sécurité : le rideau ne doit jamais rester fermé. */
-const MAX_WAIT_MS = 3000;
+/** Filet de sécurité : le rideau ne reste jamais fermé plus longtemps. */
+const MAX_WAIT_MS = 1400;
 
 /**
- * Rideau d'ouverture joué une seule fois, au premier rendu.
+ * Rideau d'ouverture, joué une fois par chargement de page.
  *
- * Le monogramme s'espace puis s'efface, les deux panneaux s'écartent, et le
- * rideau prévient <Hero> qu'il peut entrer en scène (`openCurtain`). Une fois
- * la séquence terminée, l'élément est retiré du DOM : rien ne reste au-dessus
- * de la page, même invisible.
+ * Le logo s'éclaire puis s'efface, les deux panneaux s'écartent sur un filet
+ * doré, et le rideau prévient <Hero> qu'il peut entrer en scène. Au retour sur
+ * l'accueil par la navigation interne, il ne rejoue pas. Une fois la séquence
+ * terminée, l'élément est retiré du DOM.
  */
 export default function Curtain() {
   const ref = useRef<HTMLDivElement>(null);
@@ -29,54 +26,35 @@ export default function Curtain() {
         const curtain = ref.current;
         if (!curtain) return;
 
-        // Mouvement réduit : pas de mise en scène, on entre directement.
-        if (!full) {
+        // Mouvement réduit, ou rideau déjà joué : on entre directement.
+        if (!full || curtainOpened()) {
           openCurtain();
           setDone(true);
           return;
         }
 
-        const timeline = gsap.timeline({
-          paused: true,
-          onComplete: () => setDone(true),
-        });
+        const find = gsap.utils.selector(curtain);
+        const timeline = gsap
+          .timeline({ paused: true, onComplete: () => setDone(true) })
+          .fromTo(find(`.${styles.shine}`), { xPercent: -120 }, { xPercent: 120, duration: 1, ease: 'power2.inOut' })
+          .to(find(`.${styles.mark}`), { autoAlpha: 0, scale: 1.06, duration: 0.45, ease: 'power2.in' }, '-=0.15')
+          // 101 % : le filet doré central sort du cadre avec les panneaux.
+          .to(find(`.${styles.left}`), { xPercent: -101, duration: 1.3, ease: 'expo.inOut' }, '-=0.1')
+          .to(find(`.${styles.right}`), { xPercent: 101, duration: 1.3, ease: 'expo.inOut' }, '<')
+          // Signal au sommet du geste : l'accueil monte pendant l'ouverture.
+          .call(openCurtain, undefined, '-=0.85');
 
-        timeline
-          .to(`.${styles.mark}`, {
-            letterSpacing: '0.42em',
-            duration: 1.1,
-            ease: 'power2.inOut',
-          })
-          .to(`.${styles.mark}`, { autoAlpha: 0, duration: 0.5 }, '-=0.35')
-          // Les panneaux glissent de 101 % : le filet doré central sort du cadre
-          // avec eux, sans laisser d'arête visible sur les écrans fractionnaires.
-          .to(`.${styles.left}`, { xPercent: -101, duration: 1.4, ease: 'expo.inOut' }, '-=0.2')
-          .to(`.${styles.right}`, { xPercent: 101, duration: 1.4, ease: 'expo.inOut' }, '<')
-          // Signal donné au sommet du geste : la promesse d'accueil monte
-          // pendant que les panneaux finissent de s'écarter, sans temps mort.
-          .call(openCurtain, undefined, '-=0.9');
-
-        // On attend le chargement complet pour que le diaporama d'accueil soit
-        // déjà peint derrière les panneaux au moment où ils s'écartent.
-        let startTimer = 0;
+        // Les polices chargées, le logo et le titre sont prêts à être vus.
+        let started = false;
         const start = () => {
-          startTimer = window.setTimeout(() => timeline.play(), OPEN_DELAY_MS);
+          if (started) return;
+          started = true;
+          timeline.play();
         };
+        document.fonts?.ready.then(() => window.setTimeout(start, 350)).catch(start);
+        const safety = window.setTimeout(start, MAX_WAIT_MS);
 
-        if (document.readyState === 'complete') {
-          start();
-        } else {
-          window.addEventListener('load', start, { once: true });
-        }
-
-        // Un CDN lent ne doit jamais retenir le visiteur derrière le rideau.
-        const safety = window.setTimeout(() => timeline.play(), MAX_WAIT_MS);
-
-        return () => {
-          window.clearTimeout(startTimer);
-          window.clearTimeout(safety);
-          window.removeEventListener('load', start);
-        };
+        return () => window.clearTimeout(safety);
       }),
     { scope: ref },
   );
@@ -86,7 +64,10 @@ export default function Curtain() {
   return (
     <div ref={ref} className={styles.curtain} aria-hidden="true">
       <div className={`${styles.panel} ${styles.left}`} />
-      <div className={styles.mark}>{SITE.name}</div>
+      <div className={styles.mark}>
+        <img src="/eventheme_logo_png.webp" alt="" width={260} height={260} />
+        <span className={styles.shine} />
+      </div>
       <div className={`${styles.panel} ${styles.right}`} />
     </div>
   );
