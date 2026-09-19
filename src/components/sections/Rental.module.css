@@ -243,6 +243,12 @@
     color 0.4s ease;
 }
 
+/* Un SVG sans dimensions retomberait sur les 300 x 150 px par défaut. */
+.moreArrow svg {
+  width: 1em;
+  height: 1em;
+}
+
 .more:hover .moreArrow {
   transform: rotate(45deg);
   background: var(--or);

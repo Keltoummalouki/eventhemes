@@ -7,6 +7,7 @@ import SectionHeader from '@/components/ui/SectionHeader';
 import { cx } from '@/lib/cx';
 import { gsap, MOTION, motionSafe, prefersReducedMotion, revealSafe, useGSAP } from '@/lib/motion';
 import styles from './EventTypes.module.css';
+import { ArrowUpRightIcon } from '@/components/ui/icons';
 
 /**
  * Types d'événements — une liste typographique.
@@ -103,7 +104,7 @@ export default function EventTypes() {
         }
         description="Privés, professionnels, institutionnels ou pour les enfants : choisissez votre occasion, nous imaginons le reste."
         action={
-          <Button href="/evenements" variant="link" icon="↗">
+          <Button href="/evenements" variant="link" icon={<ArrowUpRightIcon />}>
             Toutes les occasions
           </Button>
         }
@@ -123,7 +124,7 @@ export default function EventTypes() {
               <span className={styles.name}>{event.title}</span>
               <span className={styles.category}>{event.category}</span>
               <span className={styles.arrow} aria-hidden="true">
-                ↗
+                <ArrowUpRightIcon />
               </span>
               <span className="visually-hidden"> — choisir pour mon devis</span>
             </button>

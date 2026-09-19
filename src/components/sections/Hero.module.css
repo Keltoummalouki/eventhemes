@@ -122,6 +122,16 @@
   justify-content: center;
 }
 
+/* Deux classes : l'emporte sur `.ghost` quel que soit l'ordre des feuilles.
+   Le second appel à l'action est posé sur la photographie : un voile sombre
+   et un filet un peu plus net, sinon le libellé se dilue dans les zones
+   claires du diaporama. */
+.hero .secondary {
+  border-color: rgba(245, 241, 232, 0.42);
+  background: rgba(5, 5, 5, 0.3);
+  backdrop-filter: blur(2px);
+}
+
 /* --- Bas de l'écran : défilement, compteur, WhatsApp ------------------- */
 
 .bottom {
@@ -129,7 +139,7 @@
   z-index: 3;
   left: 6vw;
   right: 6vw;
-  bottom: 30px;
+  bottom: calc(30px + env(safe-area-inset-bottom, 0px));
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: end;
@@ -269,7 +279,63 @@
 }
 
 @media (max-width: 700px) {
+  /* Sur un téléphone, le bloc central et la bande basse se partagent la hauteur
+     au lieu de se superposer : « Découvrir nos services » retombait sur le
+     compteur du diaporama. La hauteur redevient libre de croître, pour qu’un
+     écran très court ne rogne ni le titre ni les appels à l’action. */
+  .hero {
+    height: auto;
+    min-height: 100svh;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .content {
+    flex: 1;
+    justify-content: center;
+    width: 100%;
+    max-width: none;
+    padding: calc(92px + env(safe-area-inset-top, 0px)) 6vw 28px;
+  }
+
+  .mark {
+    width: 48px;
+    margin-bottom: 16px;
+  }
+
+  .hero .title {
+    margin-top: 20px;
+  }
+
+  .hero .lede {
+    margin-top: 20px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+
+  /* Les deux appels à l'action s'empilent à la même largeur : cible tactile
+     confortable et alignement net sous le titre, plutôt qu'un retour à la
+     ligne qui laissait le bouton secondaire orphelin et décentré. */
+  .actions {
+    margin-top: 28px;
+    width: 100%;
+    max-width: 340px;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .actions > * {
+    width: 100%;
+  }
+
+  /* Repasse dans le flux, mais en relative : static rendrait le z-index
+     inopérant et la bande passerait sous le voile du diaporama. */
   .bottom {
+    position: relative;
+    inset: auto;
+    padding: 0 6vw calc(24px + env(safe-area-inset-bottom, 0px));
     grid-template-columns: 1fr auto;
   }
 

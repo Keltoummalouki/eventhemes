@@ -27,7 +27,7 @@ import { adminLogin } from "@/lib/eventheme/auth";
 import { Logo } from "./Shell";
 import Button from "@/components/ui/Button";
 import { confirmDialog } from "@/components/ui/dialog";
-import { CloseIcon, SocialIcon } from "@/components/ui/icons";
+import { ArrowUpRightIcon, CloseIcon, SocialIcon } from "@/components/ui/icons";
 import { socialNetworks, type SocialNetwork } from "@/data/socials";
 import {
   Checkbox,
@@ -175,7 +175,7 @@ export function AdminLogin({
               {error}
             </p>
           )}
-          <Button type="submit" block loading={busy} icon="↗">
+          <Button type="submit" block loading={busy} icon={<ArrowUpRightIcon />}>
             {busy ? "Connexion…" : "Se connecter"}
           </Button>
         </form>
@@ -344,7 +344,7 @@ export default function Admin({
           target="_blank"
           variant="link"
           size="sm"
-          icon="↗"
+          icon={<ArrowUpRightIcon />}
           className={s.sidebarLink}
         >
           Voir le site
@@ -434,7 +434,7 @@ export default function Admin({
                 additionnels.
               </p>
               <div className={s.actions}>
-                <Button icon="↗" onClick={() => navigate("projects")}>
+                <Button icon={<ArrowUpRightIcon />} onClick={() => navigate("projects")}>
                   Gérer les réalisations
                 </Button>
                 <Button
@@ -793,7 +793,7 @@ function RequestTable({
                 <Button
                   variant="link"
                   size="sm"
-                  icon="↗"
+                  icon={<ArrowUpRightIcon />}
                   onClick={() => select(structuredClone(i))}
                 >
                   Ouvrir

@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Button from "@/components/ui/Button";
-import { CloseIcon } from "@/components/ui/icons";
+import { ArrowUpRightIcon, CloseIcon } from "@/components/ui/icons";
 import { DatePicker, Input, NumberInput, Select, Textarea } from "@/components/ui/form";
 import { serviceItems } from "@/data/eventheme";
 import { isMoroccanCity, moroccanCities } from "@/data/moroccanCities";
@@ -490,7 +490,7 @@ export default function QuoteConfigurator() {
                     onChange={(rentalDays) => setDetails({ rentalDays: rentalDays ?? 1 })}
                   />
                 )}
-                <Button href="/location" variant="link" icon="↗">
+                <Button href="/location" variant="link" icon={<ArrowUpRightIcon />}>
                   Explorer le catalogue complet
                 </Button>
               </>
@@ -534,7 +534,7 @@ export default function QuoteConfigurator() {
                 ← Précédent
               </Button>
             )}
-            <Button type="submit" icon="↗" loading={busy} magnetic={step === STEPS.length - 1}>
+            <Button type="submit" icon={<ArrowUpRightIcon />} loading={busy} magnetic={step === STEPS.length - 1}>
               {busy ? "Envoi…" : step === STEPS.length - 1 ? "Recevoir mon devis" : "Continuer"}
             </Button>
           </div>

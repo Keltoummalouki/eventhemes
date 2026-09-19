@@ -2,6 +2,7 @@ import { getEntries } from "@/lib/eventheme/server";
 import { Logo } from "@/components/eventheme/Shell";
 import Button from "@/components/ui/Button";
 import s from "@/components/eventheme/Eventheme.module.css";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 export const metadata = { title: "Bientôt" };
 export default async function Page() {
   const entries = await getEntries();
@@ -31,7 +32,7 @@ export default async function Page() {
               <Button
                 key={e.id}
                 variant="link"
-                icon="↗"
+                icon={<ArrowUpRightIcon />}
                 className={s.comingLink}
                 href={e.url || "/contact"}
               >

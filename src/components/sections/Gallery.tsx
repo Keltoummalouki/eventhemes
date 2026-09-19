@@ -8,6 +8,7 @@ import { cx } from '@/lib/cx';
 import type { Entry } from '@/lib/eventheme/types';
 import { Flip, gsap, MOTION, prefersReducedMotion, revealSafe, useGSAP } from '@/lib/motion';
 import styles from './Gallery.module.css';
+import { ArrowUpRightIcon } from '@/components/ui/icons';
 
 const ALL = 'Tous';
 
@@ -96,7 +97,7 @@ export default function Gallery() {
         }
         description="Découvrez nos univers et imaginez l’ambiance de votre prochain événement."
         action={
-          <Button href="/realisations" variant="link" icon="↗">
+          <Button href="/realisations" variant="link" icon={<ArrowUpRightIcon />}>
             Toute la galerie
           </Button>
         }
@@ -246,10 +247,10 @@ function Lightbox({
           )}
           <p>{project.description}</p>
           <div className={styles.detailActions}>
-            <Button href={`/realisations/${project.id}`} variant="outline" size="sm" icon="↗">
+            <Button href={`/realisations/${project.id}`} variant="outline" size="sm" icon={<ArrowUpRightIcon />}>
               Voir le projet
             </Button>
-            <Button href="#devis" variant="link" size="sm" icon="↗" onClick={() => onClose(false)}>
+            <Button href="#devis" variant="link" size="sm" icon={<ArrowUpRightIcon />} onClick={() => onClose(false)}>
               Imaginer un événement similaire
             </Button>
           </div>

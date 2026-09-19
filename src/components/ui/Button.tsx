@@ -27,7 +27,7 @@ type CommonProps = {
   children: ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
-  /** Pictogramme décoratif placé après le libellé : ↗, +, →… */
+  /** Pictogramme décoratif placé après le libellé : <ArrowUpRightIcon />, +, →… */
   icon?: ReactNode;
   /** Action en cours : le bouton est désactivé et signale son attente. */
   loading?: boolean;

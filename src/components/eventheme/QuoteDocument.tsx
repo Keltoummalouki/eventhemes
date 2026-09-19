@@ -7,6 +7,7 @@ import { quoteMessage, whatsappLink } from "@/lib/eventheme/whatsapp";
 import { gsap, revealSafe, useGSAP } from "@/lib/motion";
 import { initialQuote, useEventheme, useQuote } from "./Provider";
 import s from "./QuoteStudio.module.css";
+import { ArrowUpRightIcon } from "@/components/ui/icons";
 
 /**
  * Le devis estimatif remis au client en fin de parcours.
@@ -174,7 +175,7 @@ export default function QuoteDocument({ result }: { result: QuoteResult }) {
         <Button icon="↓" onClick={() => window.print()}>
           Imprimer ou enregistrer en PDF
         </Button>
-        <Button variant="outline" icon="↗" onClick={sendOnWhatsApp}>
+        <Button variant="outline" icon={<ArrowUpRightIcon />} onClick={sendOnWhatsApp}>
           Envoyer sur WhatsApp
         </Button>
         <Button variant="link" onClick={() => setQuote(initialQuote())}>

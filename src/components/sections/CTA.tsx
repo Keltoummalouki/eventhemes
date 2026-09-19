@@ -11,6 +11,7 @@ import { imagery } from '@/data/eventheme';
 import { gsap, motionSafe, useGSAP } from '@/lib/motion';
 import { findSocial } from '@/lib/eventheme/types';
 import styles from './CTA.module.css';
+import { ArrowUpRightIcon } from '@/components/ui/icons';
 
 /**
  * Dernière invitation : « Parlons de votre prochain événement. »
@@ -62,11 +63,11 @@ export default function CTA() {
             votre image.
           </p>
           <div className={styles.actions}>
-            <Button href="#devis" icon="↗" magnetic>
+            <Button href="#devis" icon={<ArrowUpRightIcon />} magnetic>
               Demander un devis
             </Button>
             {whatsapp?.url && (
-              <Button href={whatsapp.url} variant="ghost" target="_blank" rel="noreferrer" icon="↗">
+              <Button href={whatsapp.url} variant="ghost" target="_blank" rel="noreferrer" icon={<ArrowUpRightIcon />}>
                 Nous contacter sur WhatsApp
               </Button>
             )}
